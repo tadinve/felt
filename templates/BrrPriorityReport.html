@@ -21,7 +21,6 @@
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 </head>
 <body>
-{% csrf_token %}
     <style type="text/css">
         
         .panel.with-nav-tabs .panel-heading{
@@ -95,7 +94,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav pull-right">
-                <li class="active"><a href="/roche/home">Home</a></li>
+                <li><a href="/roche/home">Home</a></li>
                 <li><a href="/roche/dashboard">Dashboard</a></li>
                 <li><a href="/roche/BrrPriorityReport">BRR Priority Report</a></li>
                 <li class="dropdown">
@@ -107,6 +106,7 @@
                         <li><a href="/roche/logout"><i class="fa fa-btn fa-sign-out pull-left"></i>Logout</a></li>
                     </ul>
                 </li>
+                </li>
               </ul>
             </div>
         </div>
@@ -115,31 +115,12 @@
         
     </div>
     <div class="container">
-        <h1>Scope of the Project</h1>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-lg-10">
-                <img style="text-align:center;" src="{% static 'Roche/scope.png' %}" width='1150'/>
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>FG Lead time to be calculated as:</h3>
-                <ul>
-                    <li class="text-primary"><h4>Start: Process order creation (term used in tiger process, WD19) </h4></li>
-                    <li class="text-warning"><h4>End: QP Release (term used in Melodi) </h4></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>Objective: To have the FG batch released in 21 calendar days after process order creation</h3>
-            </div>
-        </div>
+        
+        
     </div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -148,6 +129,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
     <script type="text/javascript">
-</script>
 </body>
 </html>

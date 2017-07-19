@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'GoogleSignInApp',
+    'roche_app',
     'social.apps.django_app.default',
+    'bootstrap3',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,6 +53,18 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'GoogleSignin.urls'
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 
 TEMPLATES = [
     {
