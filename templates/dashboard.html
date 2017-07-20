@@ -93,7 +93,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" style="padding:7px 0px 5px 15px;" href="#">
-                    <img src="http://www.rocheindia.com/etc/docroot/corporate/common/img/roche-logo.png" style="display: inline-block;">
+                    <img src="{% static 'Roche/roche-logo_1.png' %}" width="70" height="30" style="display: inline-block;">
                     <span style="display: inline-block; padding-top: 10px; padding-left: 15px;" >FELT Dashboard</span>
                 </a>
                 
@@ -159,9 +159,9 @@
                         <label for="to">Product:</label>
                         <select class="form-control" id="product">
                             <option value="all">All</option>
-                            <?php  foreach ($products as $product=>$val){?>
-                            <option value="<?php echo $val;?>"><?php echo $val;?></option>
-                            <?php } ?>
+                            {% for product in products %}
+                            <option value='{{ product }}'>{{ product }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-lg-2">
@@ -207,24 +207,27 @@
                     </div>
                     <div class="tab-pane fade" id="tab2default">
                         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
                         <script type="text/javascript">
-                            // Load the Visualization API and the piechart package.
-                            google.charts.load('current', {'packages':['corechart']});
-                            // Set a callback to run when the Google Visualization API is loaded.
-                            google.charts.setOnLoadCallback(drawChart);
+                                google.charts.load('current', {'packages':['corechart']});
+                                google.charts.setOnLoadCallback(drawChart);
 
-                            function drawChart() {
-                                // Define the chart to be drawn.
-                                var data1 = $.ajax({
-                                    url: "roche.php",
-                                    dataType: "json",
-                                    async: false
-                                }).responseText;
-
-                                var data = google.visualization.arrayToDataTable(jQuery.parseJSON(data1));
-
-                                var options = {
+                                function drawChart() {
+                             // Define the chart to be drawn.
+                             var data = new google.visualization.DataTable();
+                             var Data = {{ rdata|safe }};
+                                  data.addColumn('string', 'ProductName');
+                                  data.addColumn('number', 'PO_Crearte_to_Release');
+                                  data.addColumn('number', 'Pkg_Start_to_Finish');
+                                  data.addColumn('number', 'Release_to_Pkg_Start');
+                                  data.addColumn('number', 'BRR_Start_To_Finish');
+                                  data.addColumn('number', 'BRR_Finish_to_QP_Release');
+                                          
+                                  for ( var i= 0; i < Data.length; i++)
+                                  {
+                                    //document.write(Data[i]);
+                                    data.addRow([Data[i][0],Data[i][1],Data[i][2],Data[i][3],Data[i][4],Data[i][5]]);
+                                  }
+                             var options = {
                                     title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Crearte to Release by Year and Product",
                                     vAxis: {title: "Product"},
                                     isStacked:true,
@@ -232,12 +235,14 @@
                                     height: 800,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
-                                };
-                                /**/
-                                var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
-                                chart.draw(data, options);
-                            }
-                        </script>
+                                };  
+
+                             // Instantiate and draw the chart.
+                             var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
+                             chart.draw(data, options);
+                          }
+                          google.charts.setOnLoadCallback(drawChart);
+                    </script>
                         <div id="stackedbar_div">
                             
                         </div>
@@ -265,6 +270,29 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 <script src="bootstrap/js/bootstrap.min.js"></script>
+<script>
+        $(document).ready(function(){
+
+            $( document ).ready(function() {
+            $('#product').change(function(){
+                var URL = 'roche/details';
+                var input = {};
+                input['product'] = $('#product').val();
+                input['level'] = 2;
+                $.ajax({
+                    method: "post",
+                    url: URL,
+                    dataType:'html',
+                    data:input,
+                    success : function(data){
+                        $('#product_name').html('');
+                        $('#product_name').html(data);
+                    }
+                });
+
+            });
+        });
+</script>
 <script type="text/javascript">
         $( document ).ready(function() {
             $('#product').change(function(){

@@ -1,6 +1,6 @@
 
 from django.http import HttpResponse
-from django.db.models import Max, Sum
+from django.db.models import *
 from django.db import connection
 from roche_app.models import *
 from django.db.models import Q
@@ -8,9 +8,23 @@ import collections
 
 
 def GetDataForChart():
-	str1 = 'select * from GoogleSignInApp_pivot_table'
-	MetricData_obj = Pivot_table.objects.raw(str1)
-	lis = []
-	for row in MetricData_obj:
-		lis.append([row.ProductName,row.PO_Crearte_to_Release,row.Pkg_Start_to_Finish,row.Release_to_Pkg_Start,row.BRR_Start_To_Finish,row.BRR_Finish_to_QP_Release])
+	str1 = 'select product, avg(po_create_release), avg(release_to_pkg_start), avg(pkg_start_bbr_finish), avg(pkg_finish_begin), avg(brr_start_finish), avg(brr_finish_qp_release) from roche group by product;'
+	rows = GetDataFromDatabase(str1)
+	lis = list()
+	for row in rows:
+		lis.append([row[0],float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5]),float(row[6])])
 	return lis
+
+def GetAllProducts():
+	rows = GetDataFromDatabase('select Distinct(product) from roche;')
+	RocheProductList = list()
+	for row in rows:
+		RocheProductList.append(row[0])
+	return RocheProductList
+
+def GetDataFromDatabase(str1):
+	lis = []
+	c = connection.cursor()
+	c.execute(str1)
+	rows = c.fetchall()
+	return rows

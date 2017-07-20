@@ -19,6 +19,7 @@ def home(request):
 	authenticate = check_for_domain(request)
 	if authenticate:
 		lis = Reports.GetDataForChart()
+		#print(lis)
 		return render_to_response('home.html', {'rdata': json.dumps(lis), 'user': request.user})
 	else:
 		HttpResponse("Invalid user")
@@ -31,10 +32,27 @@ def logout(request):
 	return redirect('/')
 
 def BrrPriorityReport(request):
-	return render_to_response('BrrPriorityReport.html',{'user': request.user})
+	authenticate = check_for_domain(request)
+	if authenticate:
+		lis = Reports.GetDataForChart()
+		#print(lis)
+		return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user})
+	else:
+		HttpResponse("Invalid user")
+		logout(request)
+		return render_to_response('login.html')
 
 def dashboard(request):
-	return render_to_response('dashboard.html',{'user': request.user})
+	authenticate = check_for_domain(request)
+	if authenticate:
+		lis = Reports.GetDataForChart()
+		RocheObjProduct = Reports.GetAllProducts()
+		print(RocheObjProduct)
+		return render_to_response('dashboard.html', {'rdata': json.dumps(lis), 'products': RocheObjProduct, 'user': request.user})
+	else:
+		HttpResponse("Invalid user")
+		logout(request)
+		return render_to_response('login.html')
 
 def check_for_domain(request):
 	email = request.user.email.split("@")[1]
