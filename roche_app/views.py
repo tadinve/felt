@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from roche_app import Reports
 # from django.template.context import RequestContext
 from django.http import HttpResponse
+from django.template import RequestContext
 import json
 
 def login(request):
@@ -31,28 +32,33 @@ def logout(request):
 	auth_logout(request)
 	return redirect('/')
 
+@login_required(login_url='/')
 def BrrPriorityReport(request):
-	authenticate = check_for_domain(request)
-	if authenticate:
-		lis = Reports.GetDataForChart()
-		#print(lis)
-		return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user})
-	else:
-		HttpResponse("Invalid user")
-		logout(request)
-		return render_to_response('login.html')
+	lis = Reports.GetDataForChart()
+	#print(lis)
+	return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user})
 
+@login_required(login_url='/')
 def dashboard(request):
-	authenticate = check_for_domain(request)
-	if authenticate:
-		lis = Reports.GetDataForChart()
-		RocheObjProduct = Reports.GetAllProducts()
-		print(RocheObjProduct)
-		return render_to_response('dashboard.html', {'rdata': json.dumps(lis), 'products': RocheObjProduct, 'user': request.user})
-	else:
-		HttpResponse("Invalid user")
-		logout(request)
-		return render_to_response('login.html')
+	lis = Reports.GetDataForChart()
+	RocheObjProduct = Reports.GetAllProducts()
+	print(RocheObjProduct)
+	return render_to_response('dashboard.html',{'rdata': json.dumps(lis), 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
+
+#@app.route("roche/details/",methods=['GET','POST'])
+#@login_required(login_url='/')
+def ProductDetails(request):
+	product = request.GET.get('product_name',None)
+	product_names = Reports.GetProductName(product)
+	response = HttpResponse(json.dumps(product_names))
+	return response
+
+def BatchDetails(request):
+	product_name = request.GET.get('product_name',None)
+	print(product_name)
+	batch_number = Reports.GetBatchNumber(product_name)
+	response = HttpResponse(json.dumps(batch_number))
+	return response
 
 def check_for_domain(request):
 	email = request.user.email.split("@")[1]
@@ -60,3 +66,5 @@ def check_for_domain(request):
 		return True
 	else:
 		return False
+
+

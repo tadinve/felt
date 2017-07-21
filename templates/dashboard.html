@@ -80,9 +80,6 @@
         }
         
     </style>
-    <?php 
-    include_once 'details.php';
-    ?>
     <nav class="navbar navbar-default  navbar-fixed-top" >
         <div class="container">
             <div class="navbar-header">
@@ -228,7 +225,7 @@
                                     data.addRow([Data[i][0],Data[i][1],Data[i][2],Data[i][3],Data[i][4],Data[i][5]]);
                                   }
                              var options = {
-                                    title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Crearte to Release by Year and Product",
+                                    title: "",
                                     vAxis: {title: "Product"},
                                     isStacked:true,
                                     width: 1000,
@@ -270,69 +267,69 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<script>
-        $(document).ready(function(){
-
-            $( document ).ready(function() {
+<script type="text/javascript" >
+$( document ).ready(function() {
             $('#product').change(function(){
-                var URL = 'roche/details';
-                var input = {};
-                input['product'] = $('#product').val();
-                input['level'] = 2;
+                //document.write(input['product']);
                 $.ajax({
-                    method: "post",
-                    url: URL,
-                    dataType:'html',
-                    data:input,
-                    success : function(data){
-                        $('#product_name').html('');
-                        $('#product_name').html(data);
+                    method: 'get',
+                    url: "/roche/ProductDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#product').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#product_name").empty();
+                        $("#product_name").append($('<option>',{value: "All",text: "All"}));
+                        $('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#product_name").append($('<option>',{value: name,text: name}));
+
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
                     }
                 });
 
             });
         });
 </script>
-<script type="text/javascript">
-        $( document ).ready(function() {
-            $('#product').change(function(){
-                var URL = 'ajaxdetails.php';
-                var input = {};
-                input['product'] = $('#product').val();
-                input['level'] = 2;
-                $.ajax({
-                    method: "post",
-                    url: URL,
-                    dataType:'html',
-                    data:input,
-                    success : function(data){
-                        $('#product_name').html('');
-                        $('#product_name').html(data);
-                    }
-                });
-
-            });
-            
+<script type="text/javascript" >
+$( document ).ready(function() {
             $('#product_name').change(function(){
-                var URL = 'ajaxdetails.php';
-                var input = {};
-                input['product_name'] = $('#product_name').val();
-                input['level'] = 3;
+                //document.write(input['product']);
                 $.ajax({
-                    method: "post",
-                    url: URL,
-                    dataType:'html',
-                    data:input,
-                    success : function(data){
-                        $('#batch_number').html('');
-                        $('#batch_number').html(data);
+                    method: 'get',
+                    url: "/roche/BatchDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#product_name').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#batch_number").empty();
+                        $("#batch_number").append($('<option>',{value: "All",text: "All"}));
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#batch_number").append($('<option>',{value: name,text: name}));
+
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
                     }
                 });
 
             });
         });
-        
-    </script>
+</script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script>

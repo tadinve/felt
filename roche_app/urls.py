@@ -20,6 +20,8 @@ from roche_app import views
 urlpatterns = [
     url(r'^home/$', views.home,name="home"),
     url(r'^dashboard/$', views.dashboard,name="dashboard"),
-     url(r'^BrrPriorityReport/$', views.BrrPriorityReport,name="BrrPriorityReport"),
+    url(r'^ProductDetails/$', views.ProductDetails,name="ProductDetails"),
+    url(r'^BatchDetails/$', views.BatchDetails,name="BatchDetails"),
+    url(r'^BrrPriorityReport/$', views.BrrPriorityReport,name="BrrPriorityReport"),
     url(r'^logout/$',views.logout,name="logout"),
 ]
