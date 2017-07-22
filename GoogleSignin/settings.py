@@ -94,17 +94,29 @@ AUTHENTICATION_BACKENDS = [
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-DATABASES = {
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'NAME': 'RocheDatabase',
-            'USER': 'root',
-            'PASSWORD': 'mysql',
-            'HOST': 'localhost',
-            'PORT': '3306',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                'NAME': 'RocheDatabase',
+                'USER': 'root',
+                'PASSWORD': 'mysql',
+                'HOST': 'localhost',
+                'PORT': '3306',
+        }
+    }
 '''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -151,7 +163,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = ['http://kpienv.rnpcmbr4yq.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','https://kpienv.rnpcmbr4yq.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://127.0.0.1:8000/complete/google-oauth2/' , 'https://serene-reef-39478.herokuapp.com/complete/google-oauth2/', 'http://serene-reef-39478.herokuapp.com/complete/google-oauth2/']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = ['http://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','https://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://127.0.0.1:8000/complete/google-oauth2/' , 'https://serene-reef-39478.herokuapp.com/complete/google-oauth2/', 'http://serene-reef-39478.herokuapp.com/complete/google-oauth2/']
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 #SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
