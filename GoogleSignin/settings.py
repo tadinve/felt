@@ -21,11 +21,10 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'l!^q^cfm5hjp4fui780!*^(r27-2p%7)os0pj*z#n*yv8&*a19'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.108:8000',]
+ALLOWED_HOSTS = ['192.168.0.108:8000','127.0.0.1']
 
 
 # Application definition
