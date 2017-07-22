@@ -146,7 +146,7 @@
                     <div class="col-lg-2">
                         <label for="to">Product:</label>
                         <select class="form-control" id="product">
-                            <option value="all">All</option>
+                            <option value="">All</option>
                             <?php  foreach ($products as $product=>$val){?>
                             <option value="<?php echo $val;?>"><?php echo $val;?></option>
                             <?php } ?>
@@ -161,7 +161,7 @@
                     <div class="col-lg-2">
                         <label for="to">Batch:</label>
                         <select class="form-control" id="batch_number">
-                            <option value="all">All</option>
+                            <option value="">All</option>
                         </select>
                     </div>
                 </div>
@@ -200,20 +200,25 @@
                             // Load the Visualization API and the piechart package.
                             google.charts.load('current', {'packages':['corechart']});
                             // Set a callback to run when the Google Visualization API is loaded.
-                            google.charts.setOnLoadCallback(drawChart);
+                            google.charts.setOnLoadCallback(function(){
+                                drawChart();
+                            });
 
-                            function drawChart() {
+                            function drawChart(product='',productname='') {
+                                
                                 // Define the chart to be drawn.
                                 var data1 = $.ajax({
                                     url: "roche.php",
                                     dataType: "json",
-                                    async: false
+                                    async: false,
+                                    data: { product: product,productname: productname},
+                                    type: "POST"
                                 }).responseText;
 
                                 var data = google.visualization.arrayToDataTable(jQuery.parseJSON(data1));
 
                                 var options = {
-                                    title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Crearte to Release by Year and Product",
+                                    title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Create to Release by Year and Product",
                                     vAxis: {title: "Product"},
                                     isStacked:true,
                                     width: 1000,
@@ -258,7 +263,8 @@
             $('#product').change(function(){
                 var URL = 'ajaxdetails.php';
                 var input = {};
-                input['product'] = $('#product').val();
+                var product = $('#product').val();
+                input['product'] = product;
                 input['level'] = 2;
                 $.ajax({
                     method: "post",
@@ -268,6 +274,12 @@
                     success : function(data){
                         $('#product_name').html('');
                         $('#product_name').html(data);
+                        $('#stackedbar_chart').html('');
+                        google.charts.load('current', {'packages':['corechart']});
+                            // Set a callback to run when the Google Visualization API is loaded.
+                        google.charts.setOnLoadCallback(function(){
+                            drawChart(product);
+                        });
                     }
                 });
 
@@ -276,7 +288,9 @@
             $('#product_name').change(function(){
                 var URL = 'ajaxdetails.php';
                 var input = {};
-                input['product_name'] = $('#product_name').val();
+                var product = $('#product').val();
+                var product_name = $('#product_name').val();
+                input['product_name'] = product_name;
                 input['level'] = 3;
                 $.ajax({
                     method: "post",
@@ -286,6 +300,13 @@
                     success : function(data){
                         $('#batch_number').html('');
                         $('#batch_number').html(data);
+                        $('#stackedbar_chart').html('');
+                        $('#stackedbar_chart').html('');
+                        google.charts.load('current', {'packages':['corechart']});
+                            // Set a callback to run when the Google Visualization API is loaded.
+                        google.charts.setOnLoadCallback(function(){
+                            drawChart(product,product_name);
+                        });
                     }
                 });
 

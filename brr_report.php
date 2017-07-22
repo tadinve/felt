@@ -103,7 +103,49 @@
         
     </div>
     <div class="container">
-        
+        <?php
+            include('db.php');
+
+            $sqli = "select product, "
+                    . "sum(po_create_release) as po_sum"
+                    . ", sum(release_to_pkg_start) as release_sum"
+                    . ", sum(pkg_start_bbr_finish) as pkg_start_sum"
+                    . ", sum(pkg_finish_begin) as pkg_finish_sum"
+                    . ", sum(brr_start_finish) as brr_sum "
+                    . ", sum(brr_finish_qp_release) as brrfinish_sum "
+                    . "from roche group by product";
+
+            $query = mysqli_query($sql,$sqli);
+            while($result = mysqli_fetch_assoc($query))
+            {
+                $data[] = $result;
+            }
+            //echo "<pre>";print_r($data);
+        ?>
+        <table class="table table-striped">
+            <tr>
+                <th>&nbsp;</th>
+                <th>Sum - PO create to release </th>
+                <th>Sum - Release to Pkg Start</th>
+                <th>Sum - PKG Finish to BRR Begin</th>
+                <th>Sum - BRR Start to Finish</th>
+                <th>Sum - BRR Start to Finish</th>
+                <th>Sum - BRR Finish to QP Release</th>
+            </tr>
+            <?php foreach ($data as $key => $val){?>
+            <tr>
+                
+                <td><?php echo $val['product'];?></td>
+                <td><?php echo $val['po_sum'];?></td>
+                <td><?php echo $val['release_sum'];?></td>
+                <td><?php echo $val['pkg_start_sum'];?></td>
+                <td><?php echo $val['pkg_finish_sum'];?></td>
+                <td><?php echo $val['brr_sum'];?></td>
+                <td><?php echo $val['brrfinish_sum'];?></td>
+                
+            </tr>
+            <?php } ?>
+        </table>      
         
     </div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
