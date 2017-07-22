@@ -22,6 +22,9 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard,name="dashboard"),
     url(r'^ProductDetails/$', views.ProductDetails,name="ProductDetails"),
     url(r'^BatchDetails/$', views.BatchDetails,name="BatchDetails"),
+    url(r'^ProductNameChartDetails/$', views.ProductNameChartDetails,name="ProductNameChartDetails"),
+    url(r'^BatchNumberChartDetailsFinal/$', views.BatchNumberChartDetailsFinal,name="BatchNumberChartDetailsFinal"),
+    url(r'^BatchNumberChartDetails/$', views.BatchNumberChartDetails,name="BatchNumberChartDetails"),
     url(r'^BrrPriorityReport/$', views.BrrPriorityReport,name="BrrPriorityReport"),
     url(r'^logout/$',views.logout,name="logout"),
 ]

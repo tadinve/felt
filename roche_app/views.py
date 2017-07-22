@@ -60,6 +60,21 @@ def BatchDetails(request):
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
+def ProductNameChartDetails(request):
+	product = request.GET.get('product',None)
+	#print(product_name)
+	product_names = Reports.GetChartForProductName(product)
+	response = HttpResponse(json.dumps(product_names))
+	return response
+
+def BatchNumberChartDetails(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	#print(product_name)
+	batch_number = Reports.GetChartForBatchNumber(product,product_name)
+	response = HttpResponse(json.dumps(batch_number))
+	return response
+
 def check_for_domain(request):
 	email = request.user.email.split("@")[1]
 	if email in ['roche.com','solivarlabs.com','solivar.com']:
@@ -67,4 +82,11 @@ def check_for_domain(request):
 	else:
 		return False
 
-
+def BatchNumberChartDetailsFinal(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	print(product,product_name,batch_number)
+	batch_number = Reports.GetChartForBatchNumberFinal(product,product_name,batch_number)
+	response = HttpResponse(json.dumps(batch_number))
+	return response
