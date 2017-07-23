@@ -99,21 +99,13 @@
             </div>
         </div>
     </nav>
-    <div class="container" style="margin-top:80px;">
-        
-    </div>
-    <div class="container">
+    <div class="row" style="margin-top:80px;">
         <?php
             include('db.php');
 
-            $sqli = "select product, "
-                    . "sum(po_create_release) as po_sum"
-                    . ", sum(release_to_pkg_start) as release_sum"
-                    . ", sum(pkg_start_bbr_finish) as pkg_start_sum"
-                    . ", sum(pkg_finish_begin) as pkg_finish_sum"
-                    . ", sum(brr_start_finish) as brr_sum "
-                    . ", sum(brr_finish_qp_release) as brrfinish_sum "
-                    . "from roche group by product";
+            $sqli = "select * "
+                    . "from roche "
+                    . "order by process_order_creation_date limit 100";
 
             $query = mysqli_query($sql,$sqli);
             while($result = mysqli_fetch_assoc($query))
@@ -122,31 +114,44 @@
             }
             //echo "<pre>";print_r($data);
         ?>
-        <table class="table table-striped">
+        <div class="col-lg-1">&nbsp;</div>
+        <div class="col-lg-10">
+        <table class="table table-striped table-bordered table-responsive">
             <tr>
                 <th>&nbsp;</th>
-                <th>Sum - PO create to release </th>
-                <th>Sum - Release to Pkg Start</th>
-                <th>Sum - PKG Finish to BRR Begin</th>
-                <th>Sum - BRR Start to Finish</th>
-                <th>Sum - BRR Start to Finish</th>
-                <th>Sum - BRR Finish to QP Release</th>
+                <th>Process Order Number</th>
+                <th>Material Number</th>
+                <th>Product Name</th>
+                <th>Batch Number</th>
+                <th>Packaging  Final Check Date</th>
+                <th>Batch Status</th>
+                <th>Insp. start date</th>
+                <th>End of Inspection (Calculated/Estimated)</th>
+                <th>BRR Sample Check End</th>
+                <th>BRR Assistant Signoff</th>
+                <th>BRR Reviewer Signoff</th>
+                <th>Requirement Date for the Batch. </th>
             </tr>
             <?php foreach ($data as $key => $val){?>
             <tr>
-                
                 <td><?php echo $val['product'];?></td>
-                <td><?php echo $val['po_sum'];?></td>
-                <td><?php echo $val['release_sum'];?></td>
-                <td><?php echo $val['pkg_start_sum'];?></td>
-                <td><?php echo $val['pkg_finish_sum'];?></td>
-                <td><?php echo $val['brr_sum'];?></td>
-                <td><?php echo $val['brrfinish_sum'];?></td>
-                
+                <td><?php echo $val['process_order_number'];?></td>
+                <td><?php echo $val['material_number'];?></td>
+                <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['batch_number'];?></td>
+                <td><?php echo $val['packaging_head_pkg_signoff'];?></td> <!-- Verify this field (Packaging  Final Check Date)--->
+                <td><?php echo $val['batch_status'];?></td>
+                <td><?php echo $val['bbr_start'];?></td> <!--- verify this field(Insp. Start date)-->
+                <td><?php echo $val['bbr_end'];?></td><!--- verify this field(End of Inspection (Calculated/Estimated))-->
+                <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['product_name'];?></td>
             </tr>
             <?php } ?>
         </table>      
-        
+        </div>
+        <div class="col-lg-1">&nbsp;</div>
     </div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>

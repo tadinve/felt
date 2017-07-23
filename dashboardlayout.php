@@ -114,22 +114,22 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio" checked="checked">Year
+                                    <input type="radio" name="optradio" checked="checked" class="timeradio" value="year">Year
                                 </label>
                             </div>
                             <div class="col-lg-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio">Quarter
+                                    <input type="radio" name="optradio" class="timeradio" value="quarter">Quarter
                                 </label>
                             </div>
                             <div class="col-lg-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio">Month
+                                    <input type="radio" name="optradio" class="timeradio" value="months">Month
                                 </label>
                             </div>
                             <div class="col-lg-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio">Week
+                                    <input type="radio" name="optradio" class="timeradio" value="week">Week
                                 </label>
                             </div>
                         </div>
@@ -204,24 +204,25 @@
                                 drawChart();
                             });
 
-                            function drawChart(product='',productname='') {
+                            function drawChart(product='',productname='',batchnumber='',timeline='') {
                                 
                                 // Define the chart to be drawn.
                                 var data1 = $.ajax({
                                     url: "roche.php",
                                     dataType: "json",
                                     async: false,
-                                    data: { product: product,productname: productname},
+                                    data: { product: product,productname: productname,batchnumber: batchnumber,timeline:timeline},
                                     type: "POST"
                                 }).responseText;
 
                                 var data = google.visualization.arrayToDataTable(jQuery.parseJSON(data1));
 
                                 var options = {
-                                    title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Create to Release by Year and Product",
+                                    //title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Create to Release by Year and Product",
                                     vAxis: {title: "Product"},
+                                    hAxis: {title: "Days", viewWindow: {min:0}},
                                     isStacked:true,
-                                    width: 1000,
+                                    width: 1200,
                                     height: 800,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
@@ -311,8 +312,33 @@
                 });
 
             });
+            
+            $('#batch_number').change(function(){
+                var product = $('#product').val();
+                var product_name = $('#product_name').val();
+                var batch_number = $('#batch_number').val();
+                
+                google.charts.load('current', {'packages':['corechart']});
+                            // Set a callback to run when the Google Visualization API is loaded.
+                google.charts.setOnLoadCallback(function(){
+                    drawChart(product,product_name,batch_number);
+                });
+                
+            });
         });
-        
+         $(".timeradio").click(function() {
+            //alert($(this).val());
+            var product = $('#product').val();
+            var product_name = $('#product_name').val();
+            var batch_number = $('#batch_number').val();
+            var timeline = $(this).val();
+            google.charts.load('current', {'packages':['corechart']});
+                        // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(function(){
+                drawChart(product,product_name,batch_number,timeline);
+            });
+            
+        });
     </script>
 </body>
 </html>

@@ -12,7 +12,7 @@ if($_POST['level']==2){
     //echo $sqlq;exit;
     $query = mysqli_query($sql,$sqlq);
 
-    $options = "<option value='all'>All</option>";
+    $options = "<option value=''>All</option>";
     while ($row = mysqli_fetch_assoc($query)) {
         //$product_name[] = $row['product_name'];
         $options .= "<option value='".$row['product_name']."'>".$row['product_name']."</option>";
@@ -29,7 +29,7 @@ if($_POST['level']==2){
     //echo $sqlq;exit;
     $query = mysqli_query($sql,$sqlq);
 
-    $options = "<option value='all'>All</option>";
+    $options = "<option value=''>All</option>";
     while ($row = mysqli_fetch_assoc($query)) {
         //$product_name[] = $row['product_name'];
         $options .= "<option value='".$row['batch_number']."'>".$row['batch_number']."</option>";
