@@ -92,13 +92,17 @@
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <section class="login-form">
-                <div class="panel panel-default">
-                  <div class="panel-heading text-center"><h4>FELT Dashboard</h4></div>
-                  <div class="panel-body">
-                  <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" />
-                  </div>  
-                <a href="{% url 'social:begin' 'google-oauth2' %}?next=/roche/dashboard/" class="btn btn-lg btn-primary btn-block">Log in with Google credentials</a></div>
-                </section>  
+                    <div class="panel panel-default">
+                    <div class="panel-heading text-center"><h3>FELT Dashboard</h3></div>
+                    <div class="panel-body">
+                    <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" style="width:600px;height:150px;"/>
+                    </div>
+                    <div class="panel-footer">
+                         <a href="{% url 'social:begin' 'google-oauth2' %}?next=/roche/dashboard/"class="btn btn-lg btn-primary btn-block">Log in with Roche credentials</a>
+                    </div>
+                </div>  
+                </section>
+                
             </div>
             <div class="col-md-4"></div>
         </div>
@@ -107,4 +111,3 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
-
