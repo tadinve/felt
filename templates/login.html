@@ -70,7 +70,7 @@
                     text-align: center;
             }
     </style>
-    <nav class="navbar navbar-default  navbar-fixed-top" >
+    <!--nav class="navbar navbar-default  navbar-fixed-top" >
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -86,16 +86,18 @@
                 
             </div>
         </div>
-    </nav>
+    </nav-->
     <div class="container">
         <div class="row" id="pwd-container">
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <section class="login-form">
-                    <form method="post" action="#" role="login">
-                        <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" />
-                        <a href="{% url 'social:begin' 'google-oauth2' %}?next=/roche/home/" class="btn btn-lg btn-primary btn-block">Log in with Google credentials</a>
-                    </form>
+                <div class="panel panel-default">
+                  <div class="panel-heading text-center"><h4>FELT Dashboard</h4></div>
+                  <div class="panel-body">
+                  <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" />
+                  </div>  
+                <a href="{% url 'social:begin' 'google-oauth2' %}?next=/roche/dashboard/" class="btn btn-lg btn-primary btn-block">Log in with Google credentials</a></div>
                 </section>  
             </div>
             <div class="col-md-4"></div>

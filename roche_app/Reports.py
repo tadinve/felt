@@ -28,7 +28,7 @@ def GetDataFromDatabase(str1):
 	c = connection.cursor()
 	c.execute(str1)
 	rows = c.fetchall()
-	for row in rows:
+	for row in rows:	
 		lis.append(row)
 	return lis
 

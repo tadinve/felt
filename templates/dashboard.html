@@ -98,7 +98,7 @@
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav pull-right">
                  <li><a href="/roche/home">Home</a></li>
-                <li><a href="/roche/dashboard">Dashboard</a></li>
+                <li class="active"><a href="/roche/dashboard">Dashboard</a></li>
                 <li><a href="/roche/BrrPriorityReport">BRR Priority Report</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -118,10 +118,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-2 divide">
-                        <label for="from">Show By:</label>
+                    <div class="col-lg-2 divide ">
+                        <div class="row text-center">
+                            <div class="col-lg-12 ">
+                              <label for="from">Show By</label>
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 ">
                                 <label class="radio-inline">
                                     <input type="radio" name="optradio" checked="checked">Year
                                 </label>
@@ -181,14 +185,14 @@
         <div class="panel with-nav-tabs panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1default" data-toggle="tab">Tableau</a></li>
-                    <li><a href="#tab2default" data-toggle="tab">Custom</a></li>
+                    <li ><a href="#tab1default" data-toggle="tab">Tableau</a></li>
+                    <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Stacked Bar Chart</a></li>
                     <li><a href="#tab3default" data-toggle="tab">Box Plot</a></li>
                 </ul>
             </div>
             <div class="panel-body">
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="tab1default">
+                    <div class="tab-pane fade" id="tab1default">
                         <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script>
                         <div class='tableauPlaceholder' style='width: 80%;'>
                             <object class='tableauViz' width='100%' height='655' style='display:none;'>
@@ -202,7 +206,7 @@
                             </object>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="tab2default">
+                    <div class="tab-pane fade in active" id="tab2default">
                         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                         <script type="text/javascript">
                                 google.charts.load('current', {'packages':['corechart']});
@@ -213,12 +217,12 @@
                                 var data = new google.visualization.DataTable();
                                 var Data = {{ rdata|safe }};
                                   data.addColumn('string', 'ProductName');
-                                  data.addColumn('number', 'PO_Create_to_Release');
-                                  data.addColumn('number', 'Release_to_Pkg_Start');
-                                  data.addColumn('number', 'Pkg_Start_to_BRR_Finish');
-                                  data.addColumn('number', 'Pkg_Finish_Brr_Begin');
-                                  data.addColumn('number', 'BRR_Start_to_Finish');
-                                  data.addColumn('number', 'BRR_Finish_to_QP_Release');
+                                             data.addColumn('number', 'PO Create to Release');
+                                             data.addColumn('number', 'Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to BRR Finish');
+                                             data.addColumn('number', 'Pkg Finish Brr Begin');
+                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'BRR Finish to QP Release');
                                           
                                   for ( var i= 0; i < Data.length; i++)
                                   {
@@ -226,11 +230,12 @@
                                     data.addRow([Data[i][0],Data[i][1],Data[i][2],Data[i][3],Data[i][4],Data[i][5],Data[i][6]]);
                                   }
                              var options = {
-                                    title: "",
+                                    title: "Stacked Bar Chart",
                                     vAxis: {title: "Product"},
+                                    hAxis: {title: "Days", viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
-                                    height: 800,
+                                    height: 500,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
                                 };  
@@ -251,12 +256,12 @@
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO_Create_to_Release');
-                                             data.addColumn('number', 'Release_to_Pkg_Start');
-                                             data.addColumn('number', 'Pkg_Start_to_BRR_Finish');
-                                             data.addColumn('number', 'Pkg_Finish_Brr_Begin');
-                                             data.addColumn('number', 'BRR_Start_to_Finish');
-                                             data.addColumn('number', 'BRR_Finish_to_QP_Release');
+                                             data.addColumn('number', 'PO Create to Release');
+                                             data.addColumn('number', 'Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to BRR Finish');
+                                             data.addColumn('number', 'Pkg Finish Brr Begin');
+                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
@@ -266,11 +271,12 @@
 
 
                                              var options = {
-                                    title: "",
+                                    title: "Stacked Bar Chart",
                                     vAxis: {title: "Product"},
+                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
-                                    height: 800,
+                                    height: 500,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
                                 };  
@@ -291,12 +297,12 @@
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO_Create_to_Release');
-                                             data.addColumn('number', 'Release_to_Pkg_Start');
-                                             data.addColumn('number', 'Pkg_Start_to_BRR_Finish');
-                                             data.addColumn('number', 'Pkg_Finish_Brr_Begin');
-                                             data.addColumn('number', 'BRR_Start_to_Finish');
-                                             data.addColumn('number', 'BRR_Finish_to_QP_Release');
+                                             data.addColumn('number', 'PO Create to Release');
+                                             data.addColumn('number', 'Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to BRR Finish');
+                                             data.addColumn('number', 'Pkg Finish Brr Begin');
+                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
@@ -306,11 +312,12 @@
 
 
                                              var options = {
-                                    title: "",
+                                    title: "Stacked Bar Chart",
                                     vAxis: {title: "Product"},
+                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
-                                    height: 800,
+                                    height: 500,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
                                 };  
@@ -331,12 +338,12 @@
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO_Create_to_Release');
-                                             data.addColumn('number', 'Release_to_Pkg_Start');
-                                             data.addColumn('number', 'Pkg_Start_to_BRR_Finish');
-                                             data.addColumn('number', 'Pkg_Finish_Brr_Begin');
-                                             data.addColumn('number', 'BRR_Start_to_Finish');
-                                             data.addColumn('number', 'BRR_Finish_to_QP_Release');
+                                             data.addColumn('number', 'PO Create to Release');
+                                             data.addColumn('number', 'Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to BRR Finish');
+                                             data.addColumn('number', 'Pkg Finish Brr Begin');
+                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
@@ -346,11 +353,12 @@
 
 
                                              var options = {
-                                    title: "",
-                                    vAxis: {title: "Product"},
+                                    title: "Stacked Bar Chart",
+                                    vAxis: {title: "Products"},
+                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
-                                    height: 800,
+                                    height: 500,
                                     legend: { position: 'right', maxLines: 3 },
                                     bar: { groupWidth: '75%' },
                                 };  
