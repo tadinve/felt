@@ -14,36 +14,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Roche',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rochekey', models.CharField(blank=True, max_length=125, null=True)),
-                ('process_order_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('order_type', models.CharField(blank=True, max_length=255, null=True)),
-                ('material_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('product_name', models.TextField(blank=True, null=True)),
-                ('process_order_creation_date', models.CharField(blank=True, max_length=12, null=True)),
-                ('batch_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('process_order_release_date', models.CharField(blank=True, max_length=12, null=True)),
-                ('packaging_start_date', models.CharField(blank=True, max_length=12, null=True)),
-                ('packaging_end_date', models.CharField(blank=True, max_length=12, null=True)),
-                ('packaging_head_pkg_signoff', models.CharField(blank=True, max_length=12, null=True)),
-                ('bbr_start', models.CharField(blank=True, max_length=12, null=True)),
-                ('bbr_end', models.CharField(blank=True, max_length=12, null=True)),
-                ('qa_release_date', models.CharField(blank=True, max_length=12, null=True)),
-                ('product', models.CharField(blank=True, max_length=255, null=True)),
-                ('batch_status', models.IntegerField(blank=True, null=True)),
-                ('po_create_release', models.IntegerField(blank=True, null=True)),
-                ('release_to_pkg_start', models.IntegerField(blank=True, null=True)),
-                ('pkg_start_bbr_finish', models.IntegerField(blank=True, null=True)),
-                ('pkg_finish_begin', models.IntegerField(blank=True, null=True)),
-                ('brr_start_finish', models.IntegerField(blank=True, null=True)),
-                ('brr_finish_qp_release', models.IntegerField(blank=True, null=True)),
-                ('fge2e', models.IntegerField(blank=True, null=True)),
-                ('check_column', models.CharField(blank=True, max_length=15, null=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name='RocheNewModel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
