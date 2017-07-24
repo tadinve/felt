@@ -5,7 +5,7 @@ from django.conf import settings
 
 # Create your models here.
 
-class Roche(models.Model):
+'''class Roche(models.Model):
     rochekey = models.CharField(max_length=125, blank=True, null=True)
     process_order_number = models.CharField(max_length=255, blank=True, null=True)
     order_type = models.CharField(max_length=255, blank=True, null=True)
@@ -32,7 +32,7 @@ class Roche(models.Model):
     check_column = models.CharField(max_length=15, blank=True, null=True)
 
     def __str__(self):
-    	return str(self.product_name)
+    	return str(self.product_name)'''
 
 class RocheNewModel(models.Model):
     rocheid = models.CharField(db_column='Key', max_length=18, blank=True, null=True)  # Field name made lowercase.
