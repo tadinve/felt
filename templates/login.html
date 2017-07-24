@@ -89,13 +89,17 @@
     </nav-->
     <div class="container">
         <div class="row" id="pwd-container">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
                 <section class="login-form">
                     <div class="panel panel-default">
-                    <div class="panel-heading text-center"><h3>FELT Dashboard</h3></div>
+                    <div class="panel-heading text-center"><font size="10">FELT Dashboard</font></div>
                     <div class="panel-body">
-                    <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" style="width:600px;height:150px;"/>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                    <img src="{% static 'Roche/roche-logo_1.png' %}" class="img-responsive" alt="" style="width:300px;height:100px;"/>
+                    </div>
+                    <div class="col-md-0"></div>
                     </div>
                     <div class="panel-footer">
                          <a href="{% url 'social:begin' 'google-oauth2' %}?next=/roche/dashboard/"class="btn btn-lg btn-primary btn-block">Log in with Roche credentials</a>
@@ -104,7 +108,7 @@
                 </section>
                 
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-3"></div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

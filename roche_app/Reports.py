@@ -76,3 +76,8 @@ def GetChartForBatchNumberFinal(product,product_name,batch_number):
 	for row in rows:
 		lis.append([row[0],float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5]),float(row[6])])
 	return lis
+
+def GetBrrReport():
+	str1 = "select * from roche_app_roche LIMIT 100;"
+	row = GetDataFromDatabase(str1)
+	return row

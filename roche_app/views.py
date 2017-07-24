@@ -35,8 +35,9 @@ def logout(request):
 @login_required(login_url='/')
 def BrrPriorityReport(request):
 	lis = Reports.GetDataForChart()
+	BrrReport=Reports.GetBrrReport()
 	#print(lis)
-	return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user})
+	return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user, 'BrrReport': BrrReport})
 
 @login_required(login_url='/')
 def dashboard(request):
