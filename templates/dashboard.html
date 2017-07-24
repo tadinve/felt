@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Roche</title>
+<title>FELT Dashboard</title>
 <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 <!-- Optional Bootstrap theme -->
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
@@ -146,14 +146,14 @@
                   <div class="row">              
                       <div class="col-lg-2">
                           <label for="from">From:</label>
-                          <input type="date" class="form-control" id="from">
+                          <input type="date" class="form-control" id="from" value="{{ mindate }}">
                       </div>
                       <div class="col-lg-2 divide">
                           <label for="to">To:</label>
-                          <input type="date" class="form-control" id="to">
+                          <input type="date" class="form-control" id="to" value="{{ maxdate }}">
                       </div>
                       <div class="col-lg-2">
-                          <label for="to">Product:</label>
+                          <label for="to">Product Family:</label>
                           <select class="form-control" id="product">
                               <option value="all">All</option>
                               {% for product in products %}
@@ -168,7 +168,7 @@
                           </select>
                       </div>
                       <div class="col-lg-2">
-                          <label for="to">Batch:</label>
+                          <label for="to">Batch Number:</label>
                           <select class="form-control" id="batch_number">
                               <option value="all">All</option>
                           </select>
@@ -192,21 +192,22 @@
                              // Define the chart to be drawn.
                                 var data = new google.visualization.DataTable();
                                 var Data = {{ rdata|safe }};
-                                  data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO Create to Release');
-                                             data.addColumn('number', 'Release to Pkg Start');
-                                             data.addColumn('number', 'Pkg Start to BRR Finish');
-                                             data.addColumn('number', 'Pkg Finish Brr Begin');
-                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('string', 'ProductName');
+                                             data.addColumn('number', 'PO Create to PO Release');
+                                             data.addColumn('number', 'PO Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to Pkg Finish');
+                                             data.addColumn('number', 'Pkg Finish to Pkg Final Check');
+                                             data.addColumn('number', 'Pkg Final Check to BRR Begin');
+                                             data.addColumn('number', 'BRR Begin To BRR Finish');
                                              data.addColumn('number', 'BRR Finish to QP Release');
                                           
                                   for ( var i= 0; i < Data.length; i++)
                                   {
                                     //document.write(Data[i]);
-                                    data.addRow([Data[i][0],Data[i][1],Data[i][2],Data[i][3],Data[i][4],Data[i][5],Data[i][6]]);
+                                    data.addRow([Data[i][0],Data[i][1],Data[i][2],Data[i][3],Data[i][4],Data[i][5],Data[i][6],Data[i][7]]);
                                   }
                              var options = {
-                                    title: "                             Stacked Bar Chart",
+                                    title: "Stack Bar Chart for Product Family",
                                     vAxis: {title: "Product"},
                                     hAxis: {title: "Days", viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -228,26 +229,27 @@
 
                         function drawChart2() {
                             var data;
-                            $.getJSON('/roche/ProductNameChartDetails/', {'product': $('#product').val() } ,function(json) {
+                            $.getJSON('/roche/ProductNameChartDetails/', {'product': $('#product').val() ,'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO Create to Release');
-                                             data.addColumn('number', 'Release to Pkg Start');
-                                             data.addColumn('number', 'Pkg Start to BRR Finish');
-                                             data.addColumn('number', 'Pkg Finish Brr Begin');
-                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'PO Create to PO Release');
+                                             data.addColumn('number', 'PO Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to Pkg Finish');
+                                             data.addColumn('number', 'Pkg Finish to Pkg Final Check');
+                                             data.addColumn('number', 'Pkg Final Check to BRR Begin');
+                                             data.addColumn('number', 'BRR Begin To BRR Finish');
                                              data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6]]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6],json[i][7]]);
                                              }
 
 
                                              var options = {
-                                    title: "Stacked Bar Chart",
+                                    title: "Stack Bar Chart for Product Name",
                                     vAxis: {title: "Product"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -269,26 +271,27 @@
 
                         function drawChart3() {
                             var data;
-                            $.getJSON('/roche/BatchNumberChartDetails/', {'product_name': $('#product_name').val(),'product' : $('#product').val() } ,function(json) {
+                            $.getJSON('/roche/BatchNumberChartDetails/', {'product_name': $('#product_name').val(),'product' : $('#product').val() ,'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO Create to Release');
-                                             data.addColumn('number', 'Release to Pkg Start');
-                                             data.addColumn('number', 'Pkg Start to BRR Finish');
-                                             data.addColumn('number', 'Pkg Finish Brr Begin');
-                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'PO Create to PO Release');
+                                             data.addColumn('number', 'PO Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to Pkg Finish');
+                                             data.addColumn('number', 'Pkg Finish to Pkg Final Check');
+                                             data.addColumn('number', 'Pkg Final Check to BRR Begin');
+                                             data.addColumn('number', 'BRR Begin To BRR Finish');
                                              data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6]]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6],json[i][7]]);
                                              }
 
 
                                              var options = {
-                                    title: "Stacked Bar Chart",
+                                    title: "Stack Bar Chart for Batch Numbers",
                                     vAxis: {title: "Product"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -310,26 +313,69 @@
 
                         function drawChart4() {
                             var data;
-                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val() } ,function(json) {
+                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromData': $('#from').val(),'toDate': $('#to').val()  } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
-                                             data.addColumn('number', 'PO Create to Release');
-                                             data.addColumn('number', 'Release to Pkg Start');
-                                             data.addColumn('number', 'Pkg Start to BRR Finish');
-                                             data.addColumn('number', 'Pkg Finish Brr Begin');
-                                             data.addColumn('number', 'BRR Start to Finish');
+                                             data.addColumn('number', 'PO Create to PO Release');
+                                             data.addColumn('number', 'PO Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to Pkg Finish');
+                                             data.addColumn('number', 'Pkg Finish to Pkg Final Check');
+                                             data.addColumn('number', 'Pkg Final Check to BRR Begin');
+                                             data.addColumn('number', 'BRR Begin To BRR Finish');
                                              data.addColumn('number', 'BRR Finish to QP Release');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6]]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6],json[i][7]]);
                                              }
 
 
                                              var options = {
-                                    title: "Stacked Bar Chart",
+                                    title: "Stack Bar Chart for Batch Number",
+                                    vAxis: {title: "Products"},
+                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
+                                    isStacked:true,
+                                    width: 1000,
+                                    height: 500,
+                                    legend: { position: 'right', maxLines: 3 },
+                                    bar: { groupWidth: '75%' },
+                                };  
+
+                             // Instantiate and draw the chart.
+                             var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
+                             chart.draw(data, options);
+
+                            });                             
+                          }
+                             
+                    </script>
+                    <script type="text/javascript">
+
+                        function drawChart5() {
+                            var data;
+                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
+                                             //alert(json);
+                                             data = new google.visualization.DataTable();
+                                             data.addColumn('string', 'ProductName');
+                                             data.addColumn('number', 'PO Create to PO Release');
+                                             data.addColumn('number', 'PO Release to Pkg Start');
+                                             data.addColumn('number', 'Pkg Start to Pkg Finish');
+                                             data.addColumn('number', 'Pkg Finish to Pkg Final Check');
+                                             data.addColumn('number', 'Pkg Final Check to BRR Begin');
+                                             data.addColumn('number', 'BRR Begin To BRR Finish');
+                                             data.addColumn('number', 'BRR Finish to QP Release');
+                                             //alert(data);
+                                             for ( var i= 0; i < json.length; i++)
+                                             {
+                                               //document.write(json[i]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5],json[i][6],json[i][7]]);
+                                             }
+
+
+                                             var options = {
+                                    title: "Stack Bar Chart",
                                     vAxis: {title: "Products"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -377,6 +423,18 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" >
 $( document ).ready(function() {
+            $('#from').change(function(){
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawChart5();
+                    }
+
+                );
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
             $('#product').change(function(){
                 google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
@@ -396,6 +454,8 @@ $( document ).ready(function() {
                         //alert(response);
                         $("#product_name").empty();
                         $("#product_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#batch_number").empty();
+                        $("#batch_number").append($('<option>',{value: "All",text: "All"}));
                         //$('#product_name').trigger('change');
                         for(var i= 0; i< response.length; i++ )
                         {

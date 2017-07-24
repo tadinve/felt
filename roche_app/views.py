@@ -43,8 +43,9 @@ def BrrPriorityReport(request):
 def dashboard(request):
 	lis = Reports.GetDataForChart()
 	RocheObjProduct = Reports.GetAllProducts()
+	DateObj = Reports.GetMinMaxDateFromDatabase()
 	print(RocheObjProduct)
-	return render_to_response('dashboard.html',{'rdata': json.dumps(lis), 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
+	return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate':DateObj[0][0],'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
 
 #@app.route("roche/details/",methods=['GET','POST'])
 #@login_required(login_url='/')
@@ -65,14 +66,15 @@ def ProductNameChartDetails(request):
 	product = request.GET.get('product',None)
 	#print(product_name)
 	product_names = Reports.GetChartForProductName(product)
+	print(product_names)
 	response = HttpResponse(json.dumps(product_names))
 	return response
 
 def BatchNumberChartDetails(request):
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
-	#print(product_name)
 	batch_number = Reports.GetChartForBatchNumber(product,product_name)
+	print(batch_number)
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
