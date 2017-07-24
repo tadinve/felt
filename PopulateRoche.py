@@ -15,9 +15,6 @@ def populateRocheData():
             i += 1
 
 def populateRocheNewData():
-    str_delete = "DELETE FROM django_migrations WHERE app='roche_app';"
-    c = connection.cursor()
-    c.execute(str_delete)
     with open('RocheUpdatedData.csv', 'r') as csvfile:
         datafile = csv.DictReader(csvfile)
         for row in datafile:
