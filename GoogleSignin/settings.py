@@ -162,7 +162,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = ['http://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','https://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://127.0.0.1:8000/complete/google-oauth2/' , 'https://serene-reef-39478.herokuapp.com/complete/google-oauth2/', 'http://serene-reef-39478.herokuapp.com/complete/google-oauth2/']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = ['https://felt-development.yqxmcpqanb.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://felt-development.yqxmcpqanb.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','https://felt-env.k9yhtfp9dg.ap-south-1.elasticbeanstalk.com/complete/google-oauth2/','http://127.0.0.1:8000/complete/google-oauth2/' , 'https://serene-reef-39478.herokuapp.com/complete/google-oauth2/', 'http://serene-reef-39478.herokuapp.com/complete/google-oauth2/']
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 #SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
