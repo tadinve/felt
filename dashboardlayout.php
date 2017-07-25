@@ -326,19 +326,38 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
     $( function() {
-      $( "#from" ).datepicker({
+        $( "#from" ).datepicker({
             dateFormat: 'yy-mm-dd',
             onSelect: function (dateText, inst) 
             {                      
-               //drawchart()
+                var todate = $('#to').val();
+                var product = $('#product').val();
+                var product_name = $('#product_name').val();
+                var batch_number = $('#batch_number').val();
+               
+                google.charts.load('current', {'packages':['corechart']});
+                            // Set a callback to run when the Google Visualization API is loaded.
+                google.charts.setOnLoadCallback(function(){
+                    drawChart(dateText,todate,product,product_name,batch_number);
+                });
+                
             },
             
       });
       $( "#to" ).datepicker({
           dateFormat: 'yy-mm-dd',
           onSelect: function (dateText, inst) 
-            {                      
-               
+            {   
+                var fromdate = $('#from').val();
+                var product = $('#product').val();
+                var product_name = $('#product_name').val();
+                var batch_number = $('#batch_number').val();
+                
+                google.charts.load('current', {'packages':['corechart']});
+                            // Set a callback to run when the Google Visualization API is loaded.
+                google.charts.setOnLoadCallback(function(){
+                    drawChart(fromdate,dateText,product,product_name,batch_number);
+                });
             },
       });
     } );
