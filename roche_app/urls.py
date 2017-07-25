@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^BatchNumberChartDetailsFinal/$', views.BatchNumberChartDetailsFinal,name="BatchNumberChartDetailsFinal"),
     url(r'^BatchNumberChartDetails/$', views.BatchNumberChartDetails,name="BatchNumberChartDetails"),
     url(r'^BrrPriorityReport/$', views.BrrPriorityReport,name="BrrPriorityReport"),
+    url(r'^ChartWithDate/$', views.ChartWithDate,name="ChartWithDate"),
     url(r'^logout/$',views.logout,name="logout"),
 ]

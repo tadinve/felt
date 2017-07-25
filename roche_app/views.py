@@ -44,7 +44,6 @@ def dashboard(request):
 	lis = Reports.GetDataForChart()
 	RocheObjProduct = Reports.GetAllProducts()
 	DateObj = Reports.GetMinMaxDateFromDatabase()
-	print(RocheObjProduct)
 	return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate':DateObj[0][0],'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
 
 #@app.route("roche/details/",methods=['GET','POST'])
@@ -57,24 +56,24 @@ def ProductDetails(request):
 
 def BatchDetails(request):
 	product_name = request.GET.get('product_name',None)
-	print(product_name)
 	batch_number = Reports.GetBatchNumber(product_name)
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
 def ProductNameChartDetails(request):
 	product = request.GET.get('product',None)
-	#print(product_name)
-	product_names = Reports.GetChartForProductName(product)
-	print(product_names)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	product_names = Reports.GetChartForProductName(product,from_date,to_date)
 	response = HttpResponse(json.dumps(product_names))
 	return response
 
 def BatchNumberChartDetails(request):
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
-	batch_number = Reports.GetChartForBatchNumber(product,product_name)
-	print(batch_number)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	batch_number = Reports.GetChartForBatchNumber(product,product_name,from_date,to_date)
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
@@ -89,7 +88,19 @@ def BatchNumberChartDetailsFinal(request):
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	batch_number = request.GET.get('batch_number',None)
-	print(product,product_name,batch_number)
-	batch_number = Reports.GetChartForBatchNumberFinal(product,product_name,batch_number)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	batch_number = Reports.GetChartForBatchNumberFinal(product,product_name,batch_number,from_date,to_date)
 	response = HttpResponse(json.dumps(batch_number))
 	return response
+
+def ChartWithDate(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	data = Reports.GetChartFromDateAndTo(product,product_name,batch_number,from_date,to_date)
+	response = HttpResponse(json.dumps(data))
+	return response
+

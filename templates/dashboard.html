@@ -189,6 +189,7 @@
                                 google.charts.setOnLoadCallback(drawChart);
 
                                 function drawChart() {
+                                             //alert(json);
                              // Define the chart to be drawn.
                                 var data = new google.visualization.DataTable();
                                 var Data = {{ rdata|safe }};
@@ -229,7 +230,7 @@
 
                         function drawChart2() {
                             var data;
-                            $.getJSON('/roche/ProductNameChartDetails/', {'product': $('#product').val() ,'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
+                            $.getJSON('/roche/ProductNameChartDetails/', {'product': $('#product').val() ,'fromDate': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
@@ -271,7 +272,7 @@
 
                         function drawChart3() {
                             var data;
-                            $.getJSON('/roche/BatchNumberChartDetails/', {'product_name': $('#product_name').val(),'product' : $('#product').val() ,'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
+                            $.getJSON('/roche/BatchNumberChartDetails/', {'product_name': $('#product_name').val(),'product' : $('#product').val() ,'fromDate': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
@@ -313,7 +314,7 @@
 
                         function drawChart4() {
                             var data;
-                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromData': $('#from').val(),'toDate': $('#to').val()  } ,function(json) {
+                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromDate': $('#from').val(),'toDate': $('#to').val()  } ,function(json) {
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
@@ -355,8 +356,7 @@
 
                         function drawChart5() {
                             var data;
-                            $.getJSON('/roche/BatchNumberChartDetailsFinal/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromData': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
-                                             //alert(json);
+                            $.getJSON('/roche/ChartWithDate/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromDate': $('#from').val(),'toDate': $('#to').val() } ,function(json) {
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'ProductName');
                                              data.addColumn('number', 'PO Create to PO Release');
@@ -422,16 +422,26 @@
 
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" >
-$( document ).ready(function() {
-            $('#from').change(function(){
-                google.charts.load('current', {'packages':['corechart']});
+$("#from").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawChart5();
                     }
 
                 );
-            });
-        });
+});
+</script>
+<script type="text/javascript">
+  $("#to").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawChart5();
+                    }
+
+                );
+});
 </script>
 <script type="text/javascript" >
 $( document ).ready(function() {
