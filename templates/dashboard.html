@@ -176,7 +176,14 @@
                       <div class="col-lg-2">
                           <label for="to">Process:</label>
                           <select class="form-control" id="batch_number">
-                              <option value="all">All</option>
+                              <option value="all">End to End</option>
+                              <option value="all">PO Create to PO Release</option>
+                              <option value="all">PO Release to Pkg Start</option>
+                              <option value="all">Pkg Start to Pkg Finish</option>
+                              <option value="all">Pkg Finish to Pkg Final Check</option>
+                              <option value="all">Pkg Final Check to BRR Begin</option>
+                              <option value="all">BRR Begin To BRR Finish</option>
+                              <option value="all">BRR Finish to QP Release</option>
                           </select>
                       </div>
                   </div>
@@ -250,7 +257,7 @@
 
 
                                              var options = {
-                                    title: "Stack Bar Chart for Product Name",
+                                    title: "Stack Bar Chart for" + " " + $('#product').val(),
                                     vAxis: {title: "Product"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -292,7 +299,7 @@
 
 
                                              var options = {
-                                    title: "Stack Bar Chart for Batch Numbers",
+                                    title: "Stack Bar Chart for Batch Numbers of Product" + " " + $('#product').val(),
                                     vAxis: {title: "Product"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
@@ -334,7 +341,7 @@
 
 
                                              var options = {
-                                    title: "Stack Bar Chart for Batch Number",
+                                    title: "Stack Bar Chart for Batch Number " + " " + $('#batch_number').val() + "of Product " + $('#product_name').val() ,
                                     vAxis: {title: "Products"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
