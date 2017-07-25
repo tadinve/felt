@@ -63,9 +63,6 @@
             background-color: #555;
         }
     </style>
-    <?php 
-    include_once 'details.php';
-    ?>
     <nav class="navbar navbar-default  navbar-fixed-top" >
         <div class="container">
             <div class="navbar-header">
@@ -104,8 +101,9 @@
             include('db.php');
 
             $sqli = "select * "
-                    . "from roche "
-                    . "order by process_order_creation_date limit 100";
+                    . "from roche_new "
+                    . "where process_order_creation_date != '0000-00-00' "
+                    . " order by process_order_creation_date limit 100";
 
             $query = mysqli_query($sql,$sqli);
             while($result = mysqli_fetch_assoc($query))
@@ -120,33 +118,35 @@
             <tr>
                 <th>&nbsp;</th>
                 <th>Process Order Number</th>
+                <th>Order Type (packaging or repackaging)</th>
                 <th>Material Number</th>
                 <th>Product Name</th>
+                <th>Process Order Creation Date</th>
                 <th>Batch Number</th>
+                <th>Process Order Release Date</th>
+                <th>Packaging Line  Start</th>
+                <th>Packaging Line Finish</th>
                 <th>Packaging  Final Check Date</th>
-                <th>Batch Status</th>
-                <th>Insp. start date</th>
-                <th>End of Inspection (Calculated/Estimated)</th>
-                <th>BRR Sample Check End</th>
-                <th>BRR Assistant Signoff</th>
-                <th>BRR Reviewer Signoff</th>
-                <th>Requirement Date for the Batch. </th>
+                <th>BRR Start Date</th>
+                <th>BRR End Date</th>
+                <th>QA Release Date</th>
             </tr>
             <?php foreach ($data as $key => $val){?>
             <tr>
                 <td><?php echo $val['product'];?></td>
                 <td><?php echo $val['process_order_number'];?></td>
+                <td><?php echo $val['order_type'];?></td>
                 <td><?php echo $val['material_number'];?></td>
                 <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['process_order_creation_date'];?></td>
                 <td><?php echo $val['batch_number'];?></td>
-                <td><?php echo $val['packaging_head_pkg_signoff'];?></td> <!-- Verify this field (Packaging  Final Check Date)--->
-                <td><?php echo $val['batch_status'];?></td>
-                <td><?php echo $val['bbr_start'];?></td> <!--- verify this field(Insp. Start date)-->
-                <td><?php echo $val['bbr_end'];?></td><!--- verify this field(End of Inspection (Calculated/Estimated))-->
-                <td><?php echo $val['product_name'];?></td>
-                <td><?php echo $val['product_name'];?></td>
-                <td><?php echo $val['product_name'];?></td>
-                <td><?php echo $val['product_name'];?></td>
+                <td><?php echo $val['process_order_release_date'];?></td>
+                <td><?php echo $val['packaging_start_date'];?></td>
+                <td><?php echo $val['packaging_end_date'];?></td>
+                <td><?php echo $val['packaging_head_pkg_signoff'];?></td>
+                <td><?php echo $val['bbr_start'];?>
+                <td><?php echo $val['bbr_end'];?></td>
+                <td><?php echo $val['qa_release_date'];?></td>
             </tr>
             <?php } ?>
         </table>      

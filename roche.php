@@ -23,7 +23,7 @@ $sqlq = "select "
         . "avg(pkg_final_check_brr_begin) as bar5," //BRR Finish to QP Release
         . "avg(brr_begin_brr_finish) as bar6, "
         . "avg(brr_finish_qp_release) as bar7 "
-        . "from roche ";
+        . "from roche_new ";
 $where = '  WHERE 1=1 ';
 if($from!='' && $to!=''){
 $where .= ' and process_order_creation_date
