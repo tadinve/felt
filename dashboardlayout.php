@@ -109,42 +109,17 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-2 divide">
-                        <label for="from">Show By:</label>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" checked="checked" class="timeradio" value="year">Year
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" class="timeradio" value="quarter">Quarter
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" class="timeradio" value="months">Month
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" class="timeradio" value="week">Week
-                                </label>
-                            </div>
-                        </div>
-                        
-                    </div>                   
                     <div class="col-lg-2">
                         <label for="from">From:</label>
                         <input type="text" class="form-control" id="from">
                     </div>
-                    <div class="col-lg-2 divide">
+                    <div class="col-lg-2">
                         <label for="to">To:</label>
                         <input type="text" class="form-control" id="to">
                     </div>
+                    <div class="col-lg-2">&nbsp;</div>
                     <div class="col-lg-2">
-                        <label for="to">Product:</label>
+                        <label for="to">Product Family:</label>
                         <select class="form-control" id="product">
                             <option value="">All</option>
                             <?php  foreach ($products as $product=>$val){?>
@@ -204,22 +179,29 @@
                                 drawChart();
                             });
 
-                            function drawChart(product='',productname='',batchnumber='',timeline='') {
+                            function drawChart(fromdate='',todate='',product='',productname='',batchnumber='') {
                                 
                                 // Define the chart to be drawn.
                                 var data1 = $.ajax({
                                     url: "roche.php",
                                     dataType: "json",
                                     async: false,
-                                    data: { product: product,productname: productname,batchnumber: batchnumber,timeline:timeline},
+                                    data: { product: product,productname: productname,batchnumber: batchnumber,from: fromdate,to: todate },
                                     type: "POST"
                                 }).responseText;
 
                                 var data = google.visualization.arrayToDataTable(jQuery.parseJSON(data1));
-
+                                var xtitle = 'Product';
+                                if(batchnumber!='')
+                                    var xtitle = 'Batch Number';
+                                else if(productname!='')
+                                    var xtitle = 'Batch Number';
+                                else if(product!='')
+                                    var xtitle = 'Product Name';
+                                
                                 var options = {
                                     //title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Create to Release by Year and Product",
-                                    vAxis: {title: "Product"},
+                                    vAxis: {title: xtitle},
                                     hAxis: {title: "Days", viewWindow: {min:0}},
                                     isStacked:true,
                                     width: 1200,
@@ -265,6 +247,8 @@
                 var URL = 'ajaxdetails.php';
                 var input = {};
                 var product = $('#product').val();
+                var fromdate = $('#from').val();
+                var todate = $('#to').val();
                 input['product'] = product;
                 input['level'] = 2;
                 $.ajax({
@@ -274,12 +258,14 @@
                     data:input,
                     success : function(data){
                         $('#product_name').html('');
+                        $('#batch_number').html('');
                         $('#product_name').html(data);
+                        $('#batch_number').html('<option value="">All</option>');
                         $('#stackedbar_chart').html('');
                         google.charts.load('current', {'packages':['corechart']});
                             // Set a callback to run when the Google Visualization API is loaded.
                         google.charts.setOnLoadCallback(function(){
-                            drawChart(product);
+                            drawChart(fromdate,todate,product);
                         });
                     }
                 });
@@ -291,6 +277,10 @@
                 var input = {};
                 var product = $('#product').val();
                 var product_name = $('#product_name').val();
+                
+                var fromdate = $('#from').val();
+                var todate = $('#to').val();
+                
                 input['product_name'] = product_name;
                 input['level'] = 3;
                 $.ajax({
@@ -306,7 +296,7 @@
                         google.charts.load('current', {'packages':['corechart']});
                             // Set a callback to run when the Google Visualization API is loaded.
                         google.charts.setOnLoadCallback(function(){
-                            drawChart(product,product_name);
+                            drawChart(fromdate,todate,product,product_name);
                         });
                     }
                 });
@@ -318,27 +308,40 @@
                 var product_name = $('#product_name').val();
                 var batch_number = $('#batch_number').val();
                 
+                var fromdate = $('#from').val();
+                var todate = $('#to').val();
+                
                 google.charts.load('current', {'packages':['corechart']});
                             // Set a callback to run when the Google Visualization API is loaded.
                 google.charts.setOnLoadCallback(function(){
-                    drawChart(product,product_name,batch_number);
+                    drawChart(fromdate,todate,product,product_name,batch_number);
                 });
                 
             });
         });
-         $(".timeradio").click(function() {
-            //alert($(this).val());
-            var product = $('#product').val();
-            var product_name = $('#product_name').val();
-            var batch_number = $('#batch_number').val();
-            var timeline = $(this).val();
-            google.charts.load('current', {'packages':['corechart']});
-                        // Set a callback to run when the Google Visualization API is loaded.
-            google.charts.setOnLoadCallback(function(){
-                drawChart(product,product_name,batch_number,timeline);
-            });
+        
+    </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#from" ).datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (dateText, inst) 
+            {                      
+               //drawchart()
+            },
             
-        });
+      });
+      $( "#to" ).datepicker({
+          dateFormat: 'yy-mm-dd',
+          onSelect: function (dateText, inst) 
+            {                      
+               
+            },
+      });
+    } );
     </script>
 </body>
 </html>

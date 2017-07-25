@@ -4,7 +4,9 @@ include('db.php');
 $product = (isset($_POST['product']))?$_POST['product']:'';
 $productname = (isset($_POST['productname']))?$_POST['productname']:'';
 $batchnumber = (isset($_POST['batchnumber']))?$_POST['batchnumber']:'';
-$timeline = (isset($_POST['timeline']))?$_POST['timeline']:'';
+$from = (isset($_POST['from']))?$_POST['from']:'';
+$to = (isset($_POST['to']))?$_POST['to']:'';
+
 
 $sqlq = "select "
         . "product,"
@@ -14,15 +16,22 @@ $sqlq = "select "
         . "QUARTER(process_order_creation_date) as order_creation_quarter,"
         . "MONTH(process_order_creation_date) as order_creation_month,"
         . "WEEK(process_order_creation_date) as order_creation_week,"
-        . "avg(po_create_release) as bar1,"
-        . "avg(release_to_pkg_start) as bar2,"
-        . "avg(pkg_finish_begin) as bar3, "
-        . "avg(brr_start_finish) as bar4, "
-        . "avg(brr_finish_qp_release) as bar5,"
-        . "avg(pkg_start_bbr_finish) as bar6 "
+        . "avg(po_create_po_release) as bar1,"    //PO Create to PO Release
+        . "avg(po_release_to_pkg_start) as bar2," //PO Release to Pkg Start
+        . "avg(pkg_start_pkg_finish) as bar3, "    //Pkg Start to Pkg Finish
+        . "avg(pkg_finish_pkg_final_check) as bar4, "     //BRR Begin To BRR Finish
+        . "avg(pkg_final_check_brr_begin) as bar5," //BRR Finish to QP Release
+        . "avg(brr_begin_brr_finish) as bar6, "
+        . "avg(brr_finish_qp_release) as bar7 "
         . "from roche ";
 $where = '  WHERE 1=1 ';
+if($from!='' && $to!=''){
+$where .= ' and process_order_creation_date
+    BETWEEN CAST("'.$from.'" AS DATE)
+        AND CAST("'.$to.'" AS DATE) ';
+}
 $group = ' group by ';
+
 if($batchnumber){
     $where .= "and batch_number = '".$batchnumber."'";
      $group .= " batch_number " ;
@@ -36,47 +45,41 @@ if($batchnumber){
     $group .= " product " ;
 }
 
-if($timeline=='quarter'){
-    $group .= " ,QUARTER(process_order_creation_date)";
-}else if($timeline=='month'){
-    $group .= " ,MONTH(process_order_creation_date)";
-}else if($timeline=='week'){
-    $group .= " ,WEEK(process_order_creation_date)";
-}else {
-    $group .= " ,YEAR(process_order_creation_date)";
-}
+
 
 $order = '';
-$order = ' ORDER by process_order_creation_date';
+$order = ' ORDER by product';
 
 $sqlq = $sqlq.$where.$group.$order;
-
+//echo $sqlq;exit;
 $query = mysqli_query($sql,$sqlq);
-
-
+$count = mysqli_num_rows($query);
 
 if($batchnumber){
-    $myurl[] = array('Batch Number','PO create to release', 'Release to Pkg Start','PKG Start to BRR Finish','PKG Finish to BRR Begin','BRR Start to Finish','BRR Finish to QP Release');
+    $myurl[] = array('Batch Number','PO Create to PO Release', 'PO Release to Pkg Start','Pkg Start to Pkg Finish','Pkg Finish to Pkg Final Check','Pkg Final Check to BRR Begin','BRR Begin To BRR Finish','BRR Finish to QP Release');
+    if($count>0)
     while ($row = mysqli_fetch_assoc($query)) {
-        $myurl[] = array($row['order_creation_week']." ".$row['batch_number'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar6'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5']);
+        $myurl[] = array($row['batch_number'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5'],(int)$row['bar6'],(int)$row['bar7']);
     }
 }else if($productname){
-    $myurl[] = array('Batch Number','PO create to release', 'Release to Pkg Start','PKG Start to BRR Finish','PKG Finish to BRR Begin','BRR Start to Finish','BRR Finish to QP Release');
+    $myurl[] = array('Batch Number','PO Create to PO Release', 'PO Release to Pkg Start','Pkg Start to Pkg Finish','Pkg Finish to Pkg Final Check','Pkg Final Check to BRR Begin','BRR Begin To BRR Finish','BRR Finish to QP Release');
+    if($count>0)
     while ($row = mysqli_fetch_assoc($query)) {
-        $myurl[] = array($row['order_creation_year']." ".$row['batch_number'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar6'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5']);
+        $myurl[] = array($row['batch_number'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5'],(int)$row['bar6'],(int)$row['bar7']);
     }
 }else if($product){
-    $myurl[] = array('Product Name','PO create to release', 'Release to Pkg Start','PKG Start to BRR Finish','PKG Finish to BRR Begin','BRR Start to Finish','BRR Finish to QP Release');
+    $myurl[] = array('Product Name','PO Create to PO Release', 'PO Release to Pkg Start','Pkg Start to Pkg Finish','Pkg Finish to Pkg Final Check','Pkg Final Check to BRR Begin','BRR Begin To BRR Finish','BRR Finish to QP Release');
+    if($count>0)
     while ($row = mysqli_fetch_assoc($query)) {
-        $myurl[] = array($row['order_creation_year']." ".$row['product_name'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar6'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5']);
+        $myurl[] = array($row['product_name'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5'],(int)$row['bar6'],(int)$row['bar7']);
     }
 }else{
-    $myurl[] = array('Product','PO create to release', 'Release to Pkg Start','PKG Start to BRR Finish','PKG Finish to BRR Begin','BRR Start to Finish','BRR Finish to QP Release');
+    $myurl[] = array('Product','PO Create to PO Release', 'PO Release to Pkg Start','Pkg Start to Pkg Finish','Pkg Finish to Pkg Final Check','Pkg Final Check to BRR Begin','BRR Begin To BRR Finish','BRR Finish to QP Release');
+    if($count>0)
     while ($row = mysqli_fetch_assoc($query)) {
-        $myurl[] = array($row['order_creation_year']." ".$row['product'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar6'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5']);
+        $myurl[] = array($row['product'],(int)$row['bar1'],(int)$row['bar2'],(int)$row['bar3'],(int)$row['bar4'],(int)$row['bar5'],(int)$row['bar6'],(int)$row['bar7']);
     }
 }
-
 
 echo json_encode($myurl);
 ?>
