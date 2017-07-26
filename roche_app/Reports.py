@@ -90,7 +90,7 @@ def GetChartForBatchNumberFinal(product,product_name,batch_number,fd,td):
 	return lis
 
 def GetBrrReport():
-	str1 = "select process_order_number,material_number,product_name,batch_number,packaging_final_check_date,batch_status from roche_app_rochenewmodel LIMIT 100;"
+	str1 = "select process_order_number,material_number,product_name,batch_number,packaging_final_check_date,batch_status, NULL,NULL,NULL,NULL,NULL,NULL from roche_app_rochenewmodel LIMIT 100;"
 	row = GetDataFromDatabase(str1)
 	return row
 
