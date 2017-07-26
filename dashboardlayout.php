@@ -155,7 +155,7 @@
             <div class="panel-body">
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="tab1default">
-                        <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script>
+                        <!--script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script>
                         <div class='tableauPlaceholder' style='width: 80%;'>
                             <object class='tableauViz' width='100%' height='655' style='display:none;'>
                                 <param name='host_url' value='https%3A%2F%2Fus-east-1.online.tableau.com%2F' /> 
@@ -166,7 +166,20 @@
                                 <param name='showAppBanner' value='false' />
                                 <param name='showShareOptions' value='true' />
                             </object>
+                        </div-->
+                        <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script>
+                        <div class='tableauPlaceholder' style='width: 80%;'>
+                            <object class='tableauViz' width='100%' height='655' style='display:none;'>
+                                <param name='host_url' value='https%3A%2F%2Fus-east-1.online.tableau.com%2F' /> 
+                                <param name='site_root' value='&#47;t&#47;solivarlabsroche' />
+                                <param name='name' value='StackedBarChart&#47;Sheet2' />
+                                <param name='tabs' value='no' />
+                                <param name='toolbar' value='yes' />
+                                <param name='showAppBanner' value='false' />
+                                <param name='showShareOptions' value='true' />
+                            </object>
                         </div>
+                        
                     </div>
                     <div class="tab-pane fade" id="tab2default">
                         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -213,7 +226,7 @@
                                 var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
                                 google.visualization.events.addListener(chart, 'error', function (googleError) {
                                 google.visualization.errors.removeError(googleError.id);
-                                    document.getElementById("error_msg").innerHTML = "";
+                                    $("#error_msg").html('');
                                 });
                                 chart.draw(data, options);
                             }
