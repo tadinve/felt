@@ -41,10 +41,17 @@ def BrrPriorityReport(request):
 
 @login_required(login_url='/')
 def dashboard(request):
-	lis = Reports.GetDataForChart()
-	RocheObjProduct = Reports.GetAllProducts()
-	DateObj = Reports.GetMinMaxDateFromDatabase()
-	return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate':DateObj[0][0],'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
+	authenticate = check_for_domain(request)
+	if authenticate:
+		lis = Reports.GetDataForChart()
+		RocheObjProduct = Reports.GetAllProducts()
+		DateObj = Reports.GetMinMaxDateFromDatabase()
+		return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate':DateObj[0][0],'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
+	else:
+		HttpResponse("Invalid user")
+		logout(request)
+		return render_to_response('login.html')
+
 
 #@app.route("roche/details/",methods=['GET','POST'])
 #@login_required(login_url='/')
