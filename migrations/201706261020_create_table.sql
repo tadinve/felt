@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `roche_felt` (
+CREATE TABLE IF NOT EXISTS `roche_felt_tb` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Roche_Key` varchar(125) DEFAULT NULL,
   `PO_Number` varchar(255) DEFAULT NULL,
