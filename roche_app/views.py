@@ -97,6 +97,7 @@ def BatchNumberChartDetailsFinal(request):
 	batch_number = request.GET.get('batch_number',None)
 	from_date = request.GET.get('fromDate',None)
 	to_date = request.GET.get('toDate',None)
+	#print(product,product_name,batch_number,from_date,to_date)
 	batch_number = Reports.GetChartForBatchNumberFinal(product,product_name,batch_number,from_date,to_date)
 	response = HttpResponse(json.dumps(batch_number))
 	return response

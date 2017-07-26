@@ -217,12 +217,12 @@
                                   }
                              var options = {
                                     title: "Stack Bar Chart for Product Family"+ " "+" From "+$('#from').val() +" " + " "+" To"+ " " + $('#to').val(),
-                                    vAxis: {title: "Product"},
+                                    vAxis: {title: "Product Family"},
                                     hAxis: {title: "Days", viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
                                     height: 500,
-                                    legend: { position: 'right', maxLines: 3 },
+                                    legend: { position: 'right', maxLines: 6 },
                                     bar: { groupWidth: '75%' },
                                 };  
 
@@ -259,7 +259,7 @@
 
                                              var options = {
                                     title: "Stack Bar Chart for" + " " + $('#product').val()+ " "+" From "+$('#from').val() +" " + " "+" To"+ " " + $('#to').val(),
-                                    vAxis: {title: "Product Name"},
+                                    vAxis: {title: "Product Family"},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,

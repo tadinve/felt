@@ -80,10 +80,9 @@ def GetChartForBatchNumberFinal(product,product_name,batch_number,fd,td):
 	format = "%d-%M-%Y"
 	str1=str()
 	if batch_number == "All" or product_name == "all" or batch_number == "All":
-		str1 = 'select batch_number, avg(po_create_to_po_release), avg(po_release_to_pkg_start), avg(pkg_start_to_pkg_finish), avg(pkg_finish_to_pkg_final_check), avg(pkg_final_check_to_brr_begin), avg(brr_begin_to_brr_finish), avg(brr_finish_to_qp_release) from roche_app_rochenewmodel where product_name = "'+ product_name +'" and and str_to_date(process_order_creation_date,"'+format+'") Between "'+fd+'" and "'+td+'" group by batch_number;'
+		str1 = 'select batch_number, avg(po_create_to_po_release), avg(po_release_to_pkg_start), avg(pkg_start_to_pkg_finish), avg(pkg_finish_to_pkg_final_check), avg(pkg_final_check_to_brr_begin), avg(brr_begin_to_brr_finish), avg(brr_finish_to_qp_release) from roche_app_rochenewmodel where product_name = "'+ product_name +'" and str_to_date(process_order_creation_date,"'+format+'") Between "'+fd+'" and "'+td+'" group by batch_number;'
 	else:
 		str1 = 'select batch_number, avg(po_create_to_po_release), avg(po_release_to_pkg_start), avg(pkg_start_to_pkg_finish), avg(pkg_finish_to_pkg_final_check), avg(pkg_final_check_to_brr_begin), avg(brr_begin_to_brr_finish), avg(brr_finish_to_qp_release) from roche_app_rochenewmodel where product_name = "'+ product_name +'" and batch_number = "'+ batch_number +'" and str_to_date(process_order_creation_date,"'+format+'") Between "'+fd+'" and "'+td+'";'
-		#print(str1)
 	rows = GetDataFromDatabase(str1)
 	lis = list()
 	for row in rows:
