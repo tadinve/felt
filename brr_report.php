@@ -48,10 +48,10 @@
             include('db.php');
 
             $sqli = "select * "
-                    . "from roche_new"
+                    . "from roche_felt_tb"
                     //. "where process_order_creation_date != '0000-00-00' "
-                    . " order by process_order_creation_date limit 100";
-
+                    . " order by PO_creation_date limit 100";
+                //echo $sqli;exit;
             $query = mysqli_query($sql,$sqli);
             while($result = mysqli_fetch_assoc($query))
             {
@@ -80,20 +80,20 @@
             </tr>
             <?php foreach ($data as $key => $val){?>
             <tr>
-                <td><?php echo $val['product'];?></td>
-                <td><?php echo $val['process_order_number'];?></td>
-                <td><?php echo $val['order_type'];?></td>
-                <td><?php echo $val['material_number'];?></td>
-                <td><?php echo $val['product_name'];?></td>
-                <td><?php echo $val['process_order_creation_date'];?></td>
-                <td><?php echo $val['batch_number'];?></td>
-                <td><?php echo $val['process_order_release_date'];?></td>
-                <td><?php echo $val['packaging_start_date'];?></td>
-                <td><?php echo $val['packaging_end_date'];?></td>
-                <td><?php echo $val['packaging_head_pkg_signoff'];?></td>
-                <td><?php echo $val['bbr_start'];?>
-                <td><?php echo $val['bbr_end'];?></td>
-                <td><?php echo $val['qa_release_date'];?></td>
+                <td><?php echo $val['Product'];?></td>
+                <td><?php echo $val['PO_Number'];?></td>
+                <td><?php echo $val['Order_Type'];?></td>
+                <td><?php echo $val['Material_Number'];?></td>
+                <td><?php echo $val['Product_Name'];?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['PO_creation_date']));?></td>
+                <td><?php echo $val['Batch_Number'];?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['PO_Release_Date']));?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['Packaging_Line_Start']));?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['Packaging_Line_Finish']));?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['Packaging_Final_Check_Date']));?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['BRR_Start_Date']));?>
+                <td><?php echo date('d-M-Y', strtotime($val['BRR_End_Date']));?></td>
+                <td><?php echo date('d-M-Y', strtotime($val['QA_Release_Date']));?></td>
             </tr>
             <?php } ?>
         </table>      

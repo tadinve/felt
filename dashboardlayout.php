@@ -180,7 +180,7 @@
                             });
 
                             function drawChart(fromdate='',todate='',product='',productname='',batchnumber='') {
-                                
+                                $('#error_msg').html('');
                                 // Define the chart to be drawn.
                                 var data1 = $.ajax({
                                     url: "roche.php",
@@ -190,17 +190,25 @@
                                     type: "POST"
                                 }).responseText;
 
+                                var title = 'Stack Bar Chart ';
                                 var data = google.visualization.arrayToDataTable(jQuery.parseJSON(data1));
                                 var xtitle = 'Product';
-                                if(batchnumber!='')
+                                if(batchnumber!=''){
                                     var xtitle = 'Batch Number';
-                                else if(productname!='')
+                                    var title = title + 'for Batch Number: '+$('#batch_number').val(); 
+                                } else if(productname!='') {
                                     var xtitle = 'Batch Number';
-                                else if(product!='')
+                                    var title = title + 'for Product Name: '+$('#product_name').val();
+                                } else if(product!='') {
                                     var xtitle = 'Product Name';
-                                
+                                    var title = title + 'for Product: '+$('#product').val();
+                                }
+                                if(fromdate!='' && todate!=""){
+                                    title = title+' from '+fromdate+' to '+todate;
+                                }
+                                                                
                                 var options = {
-                                    //title: "BRR Finish to QP Release, BRR Start To Finish, PKG Finish to BRR Begin, Release to Pkg Start and PO Create to Release by Year and Product",
+                                    title: title,
                                     vAxis: {title: xtitle},
                                     hAxis: {title: "Days", viewWindow: {min:0}},
                                     isStacked:true,
@@ -211,9 +219,13 @@
                                 };
                                 /**/
                                 var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
+                                //google.visualization.events.addListener(chart, 'error', function (googleError) {
+                                //google.visualization.errors.removeError(googleError.id);
+                                //$("#error_msg").html('');
+                                //});
                                 google.visualization.events.addListener(chart, 'error', function (googleError) {
-                                google.visualization.errors.removeError(googleError.id);
-                                    $("#error_msg").html('');
+                                    google.visualization.errors.removeError(googleError.id);
+                                    document.getElementById("error_msg").innerHTML = "<div class='bg-info'>No Records found.</div>";
                                 });
                                 chart.draw(data, options);
                             }

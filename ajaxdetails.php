@@ -5,7 +5,7 @@ include('db.php');
 if($_POST['level']==2){
     $sqlq = "select "
             . "product_name "
-            . "from roche_new "
+            . "from roche_felt_tb "
             . " where product = '".$_POST['product']."'"
             . "group by "
             . "product_name";
@@ -22,7 +22,7 @@ if($_POST['level']==2){
 }elseif($_POST['level']==3){
     $sqlq = "select "
             . "batch_number "
-            . "from roche_new "
+            . "from roche_felt_tb "
             . " where product_name = '".$_POST['product_name']."'"
             . "group by "
             . "batch_number";
