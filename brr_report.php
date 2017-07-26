@@ -10,60 +10,7 @@
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 </head>
 <body>
-    <style type="text/css">
-        
-        .panel.with-nav-tabs .panel-heading{
-            padding: 5px 5px 0 5px;
-        }
-        .panel.with-nav-tabs .nav-tabs{
-                border-bottom: none;
-        }
-        .panel.with-nav-tabs .nav-justified{
-                margin-bottom: -1px;
-        }
-        /********************************************************************/
-        /*** PANEL DEFAULT ***/
-        .with-nav-tabs.panel-default .nav-tabs > li > a,
-        .with-nav-tabs.panel-default .nav-tabs > li > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > li > a:focus {
-            color: #777;
-        }
-        .with-nav-tabs.panel-default .nav-tabs > .open > a,
-        .with-nav-tabs.panel-default .nav-tabs > .open > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > .open > a:focus,
-        .with-nav-tabs.panel-default .nav-tabs > li > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > li > a:focus {
-            color: #777;
-                background-color: #ddd;
-                border-color: transparent;
-        }
-        .with-nav-tabs.panel-default .nav-tabs > li.active > a,
-        .with-nav-tabs.panel-default .nav-tabs > li.active > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > li.active > a:focus {
-                color: #555;
-                background-color: #fff;
-                border-color: #ddd;
-                border-bottom-color: transparent;
-        }
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu {
-            background-color: #f5f5f5;
-            border-color: #ddd;
-        }
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a {
-            color: #777;   
-        }
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
-            background-color: #ddd;
-        }
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a,
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
-        .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
-            color: #fff;
-            background-color: #555;
-        }
-    </style>
-    <nav class="navbar navbar-default  navbar-fixed-top" >
+        <nav class="navbar navbar-default  navbar-fixed-top" >
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -101,8 +48,8 @@
             include('db.php');
 
             $sqli = "select * "
-                    . "from roche_new "
-                    . "where process_order_creation_date != '0000-00-00' "
+                    . "from roche_modified"
+                    //. "where process_order_creation_date != '0000-00-00' "
                     . " order by process_order_creation_date limit 100";
 
             $query = mysqli_query($sql,$sqli);

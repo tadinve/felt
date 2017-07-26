@@ -6,7 +6,18 @@ $productname = (isset($_POST['productname']))?$_POST['productname']:'';
 $batchnumber = (isset($_POST['batchnumber']))?$_POST['batchnumber']:'';
 $from = (isset($_POST['from']))?$_POST['from']:'';
 $to = (isset($_POST['to']))?$_POST['to']:'';
-
+ /*select 
+ product
+ , avg(if(datediff(process_order_release_date,process_order_creation_date)<0,0,datediff(process_order_release_date,process_order_creation_date))) as po_create_to_release 
+ , avg(if(datediff(packaging_start_date,process_order_release_date)<0,0,datediff(packaging_start_date,process_order_release_date))) as po_release_to_pkg_start
+ , avg(if(datediff(packaging_end_date,packaging_start_date)<0,0,datediff(packaging_end_date,packaging_start_date))) as pkg_start_pkg_finish
+ , avg(if(datediff(packaging_head_pkg_signoff,packaging_end_date)<0,0,datediff(packaging_head_pkg_signoff,packaging_end_date))) as Pkg_Finish_to_Pkg_Final_Check
+ , avg(if(datediff(bbr_start,packaging_head_pkg_signoff)<0,0,datediff(bbr_start,packaging_head_pkg_signoff))) as Pkg_Final_Check_to_BRR_Begin
+ , avg(if(datediff(bbr_end,bbr_start)<0,0,datediff(bbr_end,bbr_start))) as BRR_Begin_To_BRR_Finish
+ , avg(if(datediff(qa_release_date,bbr_end)<0,0,datediff(qa_release_date,bbr_end))) as BRR_Finish_to_QP_Release
+ from 
+ roche_modified 
+ group by product;*/
 
 $sqlq = "select "
         . "product,"
@@ -16,14 +27,14 @@ $sqlq = "select "
         . "QUARTER(process_order_creation_date) as order_creation_quarter,"
         . "MONTH(process_order_creation_date) as order_creation_month,"
         . "WEEK(process_order_creation_date) as order_creation_week,"
-        . "avg(po_create_po_release) as bar1,"    //PO Create to PO Release
-        . "avg(po_release_to_pkg_start) as bar2," //PO Release to Pkg Start
-        . "avg(pkg_start_pkg_finish) as bar3, "    //Pkg Start to Pkg Finish
-        . "avg(pkg_finish_pkg_final_check) as bar4, "     //BRR Begin To BRR Finish
-        . "avg(pkg_final_check_brr_begin) as bar5," //BRR Finish to QP Release
-        . "avg(brr_begin_brr_finish) as bar6, "
-        . "avg(brr_finish_qp_release) as bar7 "
-        . "from roche_new ";
+        . "avg(if(datediff(process_order_release_date,process_order_creation_date)<0,0,datediff(process_order_release_date,process_order_creation_date))) as bar1,"    //po_create_to_release
+        . "avg(if(datediff(packaging_start_date,process_order_release_date)<0,0,datediff(packaging_start_date,process_order_release_date))) as bar2," //po_release_to_pkg_start
+        . "avg(if(datediff(packaging_end_date,packaging_start_date)<0,0,datediff(packaging_end_date,packaging_start_date))) as bar3, "    //pkg_start_pkg_finish
+        . "avg(if(datediff(packaging_head_pkg_signoff,packaging_end_date)<0,0,datediff(packaging_head_pkg_signoff,packaging_end_date))) as bar4, "     //Pkg_Finish_to_Pkg_Final_Check
+        . "avg(if(datediff(bbr_start,packaging_head_pkg_signoff)<0,0,datediff(bbr_start,packaging_head_pkg_signoff))) as bar5," //Pkg_Final_Check_to_BRR_Begin
+        . "avg(if(datediff(bbr_end,bbr_start)<0,0,datediff(bbr_end,bbr_start))) as bar6, "//BRR_Begin_To_BRR_Finish
+        . "avg(if(datediff(qa_release_date,bbr_end)<0,0,datediff(qa_release_date,bbr_end))) as bar7 " //BRR_Finish_to_QP_Release
+        . "from roche_modified ";
 $where = '  WHERE 1=1 ';
 if($from!='' && $to!=''){
 $where .= ' and process_order_creation_date

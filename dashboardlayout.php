@@ -211,9 +211,14 @@
                                 };
                                 /**/
                                 var chart = new google.visualization.BarChart(document.getElementById('stackedbar_div'));
+                                google.visualization.events.addListener(chart, 'error', function (googleError) {
+                                google.visualization.errors.removeError(googleError.id);
+                                    document.getElementById("error_msg").innerHTML = "";
+                                });
                                 chart.draw(data, options);
                             }
                         </script>
+                        <div id="error_msg"></div>
                         <div id="stackedbar_div">
                             
                         </div>
