@@ -175,16 +175,16 @@
                       </div>
                       <div class="col-lg-2">
                           <label for="to">Process:</label>
-                          <select class="form-control" id="batch_number">
+                          <select class="form-control" id="processName">
                               <option value="all">All</option>
-                              <option value="all">End to End</option>
-                              <option value="all">PO Create to PO Release</option>
-                              <option value="all">PO Release to Pkg Start</option>
-                              <option value="all">Pkg Start to Pkg Finish</option>
-                              <option value="all">Pkg Finish to Pkg Final Check</option>
-                              <option value="all">Pkg Final Check to BRR Begin</option>
-                              <option value="all">BRR Begin To BRR Finish</option>
-                              <option value="all">BRR Finish to QP Release</option>
+                              <option value="End to End">End to End</option>
+                              <option value="PO Create to PO Release">PO Create to PO Release</option>
+                              <option value="PO Release to Pkg Start">PO Release to Pkg Start</option>
+                              <option value="Pkg Start to Pkg Finish">Pkg Start to Pkg Finish</option>
+                              <option value="Pkg Finish to Pkg Final Check">Pkg Finish to Pkg Final Check</option>
+                              <option value="Pkg Final Check to BRR Begin">Pkg Final Check to BRR Begin</option>
+                              <option value="BRR Begin To BRR Finish">BRR Begin To BRR Finish</option>
+                              <option value="BRR Finish to QP Release">BRR Finish to QP Release</option>
                           </select>
                       </div>
                   </div>
@@ -401,6 +401,60 @@
                           }
                              
                     </script>
+                    <script type="text/javascript">
+                          function drawBoxPlot() {
+                            $.getJSON('/roche/BoxPlotChart/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromDate': $('#from').val(),'toDate': $('#to').val(), 'processName': $('#processName').val() } ,function(json) { 
+                              var data = new google.visualization.DataTable();
+                                    data.addColumn('string', 'x');
+                                    data.addColumn('number', 'series0');
+                                    data.addColumn('number', 'series1');
+                                    data.addColumn({id:'min', type:'number', role:'interval'});
+                                    data.addColumn({id:'max', type:'number', role:'interval'});
+                                    data.addColumn({id:'median', type:'number', role:'interval'});
+                                    data.addColumn({id:'firstQuartile', type:'number', role:'interval'});
+                                    data.addColumn({id:'thirdQuartile', type:'number', role:'interval'});
+                                    //data.addRows(getBoxPlotValues(json));
+                                    for ( var i= 0; i < json.length; i++)
+                                             {
+                                               //document.write(json[i]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5]]);
+                                             }
+                                   var options = {
+                                        title:'Box Plot',
+                                        height: 500,
+                                        legend: {position: 'none'},
+                                        hAxis: {
+                                          gridlines: {color: '#fff'}
+                                        },
+                                        lineWidth: 0,
+                                        series: [{'color': '#D3362D'}],
+                                        intervals: {
+                                          barWidth: 1,
+                                          boxWidth: 1,
+                                          lineWidth: 2,
+                                          style: 'boxes'
+                                        },
+                                        interval: {
+                                          max: {
+                                            style: 'bars',
+                                            fillOpacity: 1,
+                                            color: '#777'
+                                          },
+                                          min: {
+                                            style: 'bars',
+                                            fillOpacity: 1,
+                                            color: '#777'
+                                          }
+                                        }
+                                    };
+
+                                    var chart = new google.visualization.LineChart(document.getElementById('stackedbar_div'));
+
+                                    chart.draw(data, options);
+                            });
+
+                          }
+                    </script>
 
                         <div id="stackedbar_div">
                             
@@ -538,6 +592,19 @@ $( document ).ready(function() {
             google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawChart4();
+                    }
+
+                );
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#processName').change(function(){
+            google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot();
                     }
 
                 );

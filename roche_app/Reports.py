@@ -4,7 +4,7 @@ from django.db.models import *
 from django.db import connection
 from roche_app.models import *
 from django.db.models import Q
-import collections
+import collections, csv
 
 
 def GetDataForChart():
@@ -90,9 +90,15 @@ def GetChartForBatchNumberFinal(product,product_name,batch_number,fd,td):
 	return lis
 
 def GetBrrReport():
-	str1 = "select process_order_number,material_number,product_name,batch_number,packaging_final_check_date,batch_status, NULL,NULL,NULL,NULL,NULL,NULL from roche_app_rochenewmodel LIMIT 100;"
-	row = GetDataFromDatabase(str1)
-	return row
+	'''str1 = "select process_order_number,material_number,product_name,batch_number,packaging_final_check_date,batch_status, NULL,NULL,NULL,NULL,NULL,NULL from roche_app_rochenewmodel LIMIT 100;"
+	row = GetDataFromDatabase(str1)'''
+	li=list()
+	with open('BrrPriorityReport.csv') as file:
+		datafile = csv.reader(file)
+		next(datafile, None)
+		for row in datafile:
+			li.append(row)
+	return li
 
 def GetChartFromDateAndTo(p,pn,bn,fd,td):
 	format = "%d-%M-%Y"
@@ -110,4 +116,27 @@ def GetChartFromDateAndTo(p,pn,bn,fd,td):
 	lis=list()
 	for row in rows:
 		lis.append([row[0],float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5]),float(row[6]),float(row[7])])
+	return lis
+
+
+def GetBoxPlotChart(p,pn,bn,fd,td,process_name):
+	format = "%d-%M-%Y"
+	str1 = str()
+	dict = {'PO Create to PO Release':'po_create_to_po_release', 'PO Release to Pkg Start':' po_release_to_pkg_start', 'Pkg Start to Pkg Finish':'pkg_start_to_pkg_finish', 'Pkg Finish to Pkg Final Check': 'pkg_finish_to_pkg_final_check','Pkg Final Check to BRR Begin':'pkg_final_check_to_brr_begin','BRR Begin To BRR Finish': 'brr_begin_to_brr_finish', 'BRR Finish to QP Release':'brr_finish_to_qp_release' }
+	if (p == "all" or p == "All"):
+		str1 = "select product , min( "+dict[process_name]+"),max( "+dict[process_name]+"), (avg( "+dict[process_name]+")) as mean,((avg( "+dict[process_name]+")) + (min( "+dict[process_name]+"))) / 2 as Q1, (max( "+dict[process_name]+") + avg( "+dict[process_name]+")) / 2 as Q3  from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' group by product;"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all") :
+		str1 = "select product_name, min( "+dict[process_name]+"),max( "+dict[process_name]+"), (avg( "+dict[process_name]+")) as mean,((avg( "+dict[process_name]+")) + (min( "+dict[process_name]+"))) / 2 as Q1, (max( "+dict[process_name]+") + avg( "+dict[process_name]+")) / 2 as Q3 from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product = '"+p+"' group by product_name;"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "ALl"):
+		str1 = "select batch_number, min( "+dict[process_name]+"),max( "+dict[process_name]+"), (avg( "+dict[process_name]+")) as mean,((avg( "+dict[process_name]+")) + (min( "+dict[process_name]+"))) / 2 as Q1, (max( "+dict[process_name]+") + avg( "+dict[process_name]+")) / 2 as Q3 from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch_number ;"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch_number, min( "+dict[process_name]+"),max( "+dict[process_name]+"), (avg( "+dict[process_name]+")) as mean,((avg( "+dict[process_name]+")) + (min( "+dict[process_name]+"))) / 2 as Q1, (max( "+dict[process_name]+") + avg( "+dict[process_name]+")) / 2 as Q3 from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and batch_number = '"+bn+"' group by batch_number;"
+	print(str1)
+	rows = GetDataFromDatabase(str1)
+	lis=list()
+	#dict2 = {'ALTUZAN': [], 'AVASTIN': [], 'BONDRONA':[], 'BONIVA':[], 'BONVIVA':[],'HERCEPTI':[], 'MIRCERA':[] , 'PERjETA':[], 'NEORECOR':[], 'RECORMON':[], 'ROACTEM':[]}
+	for row in rows:
+		#print(row)
+		lis.append([row[0],float(row[1]),float(row[2]),float(row[3]),float(row[4]),float(row[5])])
+	#print(dict2)
 	return lis
