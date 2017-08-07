@@ -112,3 +112,14 @@ def ChartWithDate(request):
 	response = HttpResponse(json.dumps(data))
 	return response
 
+def BoxPlotChart(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	process_name = request.GET.get('processName',None)
+	print(process_name)
+	data = Reports.GetBoxPlotChart(product,product_name,batch_number,from_date,to_date,process_name)
+	response = HttpResponse(json.dumps(data))
+	return response
