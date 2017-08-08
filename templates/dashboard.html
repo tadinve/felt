@@ -122,10 +122,34 @@
                     <li ><a href="#tab1default" data-toggle="tab">Tableau</a></li>
                     <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Stacked Bar Chart</a></li>
                     <li><a href="#tab3default" data-toggle="tab">Box Plot</a></li>
+                    <li><a href="#tab4default" data-toggle="tab">Custom Box Plot</a></li>
                 </ul>
             </div>
             <div class="panel-body">
                 <div class="tab-content">
+                <div class="tab-pane fade" id="tab4default">
+                <div class="row">
+                          <div class="col-lg-4 center"></div>
+                         <div class="col-lg-4 ">
+                          <label for="to">Process:</label>
+                          <select class="form-control" id="processName">
+                              <option value="all">All</option>
+                              <option value="End to End">End to End</option>
+                              <option value="PO Create to PO Release">PO Create to PO Release</option>
+                              <option value="PO Release to Pkg Start">PO Release to Pkg Start</option>
+                              <option value="Pkg Start to Pkg Finish">Pkg Start to Pkg Finish</option>
+                              <option value="Pkg Finish to Pkg Final Check">Pkg Finish to Pkg Final Check</option>
+                              <option value="Pkg Final Check to BRR Begin">Pkg Final Check to BRR Begin</option>
+                              <option value="BRR Begin To BRR Finish">BRR Begin To BRR Finish</option>
+                              <option value="BRR Finish to QP Release">BRR Finish to QP Release</option>
+                          </select>
+                          
+                      </div>
+                      </div>
+                      <div id="CustomBoxplot">
+                            
+                          </div>
+                    </div>
                     <div class="tab-pane fade" id="tab1default">
                         <script type='text/javascript' src='https://dub01.online.tableau.com/javascripts/api/viz_v1.js'></script>
                         <div class='tableauPlaceholder' style='width: 1386px; height: 679px;'>
@@ -171,20 +195,7 @@
                               <option value="all">All</option>
                           </select>
                       </div>
-                      <div class="col-lg-2">
-                          <label for="to">Process:</label>
-                          <select class="form-control" id="processName">
-                              <option value="all">All</option>
-                              <option value="End to End">End to End</option>
-                              <option value="PO Create to PO Release">PO Create to PO Release</option>
-                              <option value="PO Release to Pkg Start">PO Release to Pkg Start</option>
-                              <option value="Pkg Start to Pkg Finish">Pkg Start to Pkg Finish</option>
-                              <option value="Pkg Finish to Pkg Final Check">Pkg Finish to Pkg Final Check</option>
-                              <option value="Pkg Final Check to BRR Begin">Pkg Final Check to BRR Begin</option>
-                              <option value="BRR Begin To BRR Finish">BRR Begin To BRR Finish</option>
-                              <option value="BRR Finish to QP Release">BRR Finish to QP Release</option>
-                          </select>
-                      </div>
+                     
                   </div>
                 </div>
               </div>
@@ -446,7 +457,7 @@
                                         }
                                     };
 
-                                    var chart = new google.visualization.LineChart(document.getElementById('stackedbar_div'));
+                                    var chart = new google.visualization.LineChart(document.getElementById('CustomBoxplot'));
 
                                     chart.draw(data, options);
                             });
@@ -461,6 +472,7 @@
                     <div class="tab-pane fade" id="tab3default">
                         <script type='text/javascript' src='https://dub01.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1386px; height: 679px;'><object class='tableauViz' width='1386' height='679' style='display:none;'><param name='host_url' value='https%3A%2F%2Fdub01.online.tableau.com%2F' /> <param name='site_root' value='&#47;t&#47;rochesolivarlabs' /><param name='name' value='Dev-BoxPlotChart&#47;BoxPlotChart' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /><param name='showShareOptions' value='true' /></object></div>
                     </div>
+
                 </div>
             </div>
         </div>    
