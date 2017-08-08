@@ -94,8 +94,7 @@ def GetBrrReport():
 	row = GetDataFromDatabase(str1)'''
 	li=list()
 	with open('BrrPriorityReport.csv') as file:
-		datafile = csv.reader(file)
-		next(datafile, None)
+		datafile = csv.DictReader(file)
 		for row in datafile:
 			li.append(row)
 	return li

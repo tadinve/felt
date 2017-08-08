@@ -7,6 +7,7 @@ from roche_app import Reports
 from django.http import HttpResponse
 from django.template import RequestContext
 import json
+from django.template.defaulttags import register
 
 def login(request):
 	# context = RequestContext(request, {
@@ -36,7 +37,7 @@ def logout(request):
 def BrrPriorityReport(request):
 	lis = Reports.GetDataForChart()
 	BrrReport=Reports.GetBrrReport()
-	#print(lis)
+	#print(BrrReport)
 	return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user, 'BrrReport': BrrReport})
 
 @login_required(login_url='/')
@@ -123,3 +124,8 @@ def BoxPlotChart(request):
 	data = Reports.GetBoxPlotChart(product,product_name,batch_number,from_date,to_date,process_name)
 	response = HttpResponse(json.dumps(data))
 	return response
+
+
+@register.filter(name='getkey')
+def getkey(value, arg):
+    return value[arg]

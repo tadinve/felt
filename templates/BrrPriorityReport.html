@@ -126,11 +126,24 @@
             </tr>
             {% for row in BrrReport %}
             <tr>
-            <td>NULL</td>
-             {% for r in row %}
-
-                <td style="text-align:center;"><font size="1" >{{ r }}</font></td>
-             {% endfor %}   
+                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row.Material }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Short text for inspection object' }}
+                </font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Batch' }}
+                </font></td>
+                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Batch Status' }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Insp. start date' }}
+                </font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'End of Inspection' }}
+                </font></td>
+                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Requirement Date for the Component' }}
+                </font></td>
+                  
             </tr>
             {% endfor %}
 
