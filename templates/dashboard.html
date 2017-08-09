@@ -415,18 +415,21 @@
                             $.getJSON('/roche/BoxPlotChart/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromDate': $('#from').val(),'toDate': $('#to').val(), 'processName': $('#processName').val() } ,function(json) { 
                               var data = new google.visualization.DataTable();
                                     data.addColumn('string', 'x');
-                                    data.addColumn('number', 'series0');
-                                    data.addColumn('number', 'series1');
+                                    data.addColumn('number', 'Min');
+                                    data.addColumn('number', 'Max');
+                                    data.addColumn('number', 'firstQuartile');
+                                    data.addColumn('number', 'Mean');
+                                    data.addColumn('number', 'thirdQuartile');
                                     data.addColumn({id:'min', type:'number', role:'interval'});
                                     data.addColumn({id:'max', type:'number', role:'interval'});
-                                    data.addColumn({id:'median', type:'number', role:'interval'});
                                     data.addColumn({id:'firstQuartile', type:'number', role:'interval'});
+                                    data.addColumn({id:'median', type:'number', role:'interval'});
                                     data.addColumn({id:'thirdQuartile', type:'number', role:'interval'});
                                     //data.addRows(getBoxPlotValues(json));
                                     for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][1],json[i][2],json[i][3],json[i][4],json[i][5]]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5]]);
                                              }
                                    var options = {
                                         title:'Box Plot',
@@ -435,8 +438,11 @@
                                         hAxis: {
                                           gridlines: {color: '#fff'}
                                         },
+                                        vAxis:{
+                                          viewWindow: { min : -10 },
+                                        },
                                         lineWidth: 0,
-                                        series: [{'color': '#D3362D'}],
+                                        series: [{'color': '#D3882D'}],
                                         intervals: {
                                           barWidth: 1,
                                           boxWidth: 1,
@@ -447,12 +453,12 @@
                                           max: {
                                             style: 'bars',
                                             fillOpacity: 1,
-                                            color: '#777'
+                                            color: '#557'
                                           },
                                           min: {
                                             style: 'bars',
                                             fillOpacity: 1,
-                                            color: '#777'
+                                            color: '#999'
                                           }
                                         }
                                     };
