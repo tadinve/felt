@@ -129,6 +129,7 @@
                 <div class="tab-content">
                 <div class="tab-pane fade" id="tab4default">
                 <div class="row">
+
                           <div class="col-lg-4 center"></div>
                          <div class="col-lg-4 ">
                           <label for="to">Process:</label>
@@ -429,17 +430,20 @@
                                     for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5]]);
+                                              // data.addRow([json[i][0],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5]]);
+                                               data.addRow([json[i]['element'],json[i]['min'],json[i]['max'],json[i]['Q1'],json[i]['median'],json[i]['Q3'],json[i]['min'],json[i]['max'],json[i]['Q1'],json[i]['median'],json[i]['Q3']]);
                                              }
                                    var options = {
                                         title:'Box Plot',
                                         height: 500,
                                         legend: {position: 'none'},
                                         hAxis: {
-                                          gridlines: {color: '#fff'}
+
+                                          gridlines: {color: 'transparent'}
                                         },
                                         vAxis:{
-                                          viewWindow: { min : -10 },
+                                          viewWindow: { min : 0 },
+                                          gridlines: {color: 'transparent'},
                                         },
                                         lineWidth: 0,
                                         series: [{'color': '#D3882D'}],
@@ -458,7 +462,7 @@
                                           min: {
                                             style: 'bars',
                                             fillOpacity: 1,
-                                            color: '#999'
+                                            color: '#557'
                                           }
                                         }
                                     };

@@ -92,19 +92,29 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-DATABASES = {
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
+else:
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'NAME': 'ebdb',
+            'NAME': 'RocheDatabase',
             'USER': 'root',
-            'PASSWORD': 'mysql123',
-            'HOST': 'aa17zrjytsb1e8p.c4ubrs2xpbu6.ap-south-1.rds.amazonaws.com',
+            'PASSWORD': 'mysql',
+            'HOST': 'localhost',
             'PORT': '3306',
+        }
     }
-}
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
