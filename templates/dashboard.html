@@ -129,9 +129,39 @@
                 <div class="tab-content">
                 <div class="tab-pane fade" id="tab4default">
                 <div class="row">
-
-                          <div class="col-lg-4 center"></div>
-                         <div class="col-lg-4 ">
+                <div class="panel">
+                <div class="panel-body">
+                  <div class="row">              
+                      <div class="col-lg-2">
+                          <label for="from">From:</label>
+                          <input type="date" class="form-control" id="bfrom" value="{{ mindate }}">
+                      </div>
+                      <div class="col-lg-2 divide">
+                          <label for="to">To:</label>
+                          <input type="date" class="form-control" id="bto" value="{{ maxdate }}">
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Family:</label>
+                          <select class="form-control" id="bproduct">
+                              <option value="all">All</option>
+                              {% for product in products %}
+                              <option value='{{ product }}'>{{ product }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Name:</label>
+                          <select class="form-control" id="bproduct_name">
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Batch Number:</label>
+                          <select class="form-control" id="bbatch_number">
+                              <option value="all">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2 ">
                           <label for="to">Process:</label>
                           <select class="form-control" id="processName">
                               <option value="all">All</option>
@@ -146,10 +176,15 @@
                           </select>
                           
                       </div>
-                      </div>
+                     
+                  </div>
+                </div>
+              </div>
+                         
                       <div id="CustomBoxplot">
                             
                           </div>
+                    </div>
                     </div>
                     <div class="tab-pane fade" id="tab1default">
                         <script type='text/javascript' src='https://dub01.online.tableau.com/javascripts/api/viz_v1.js'></script>
@@ -413,7 +448,7 @@
                     </script>
                     <script type="text/javascript">
                           function drawBoxPlot() {
-                            $.getJSON('/roche/BoxPlotChart/', {'product_name': $('#product_name').val(),'product' : $('#product').val(),'batch_number': $('#batch_number').val(),'fromDate': $('#from').val(),'toDate': $('#to').val(), 'processName': $('#processName').val() } ,function(json) { 
+                            $.getJSON('/roche/BoxPlotChart/', {'product_name': $('#bproduct_name').val(),'product' : $('#bproduct').val(),'batch_number': $('#bbatch_number').val(),'fromDate': $('#bfrom').val(),'toDate': $('#bto').val(), 'processName': $('#processName').val() } ,function(json) { 
                               var data = new google.visualization.DataTable();
                                     data.addColumn('string', 'x');
                                     data.addColumn('number', 'Min');
@@ -513,6 +548,30 @@ $("#from").change(function(event)
 
                 );
 });
+
+</script>
+<script type="text/javascript" >
+$("#bfrom").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot();
+                    }
+
+                );
+});
+</script>
+<script type="text/javascript">
+  $("#bto").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot();
+                    }
+
+                );
+});
+
 </script>
 <script type="text/javascript" >
 $( document ).ready(function() {
@@ -543,6 +602,47 @@ $( document ).ready(function() {
                             var name = response[i];
                             //document.write(name);
                             $("#product_name").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#bproduct').change(function(){
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot()
+                    }
+
+                );
+
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/ProductDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#bproduct').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#bproduct_name").empty();
+                        $("#bproduct_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#bbatch_number").empty();
+                        $("#bbatch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#bproduct_name").append($('<option>',{value: name,text: name}));
 
                         }                      
                         
@@ -594,7 +694,58 @@ $( document ).ready(function() {
             });
         });
 </script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#bproduct_name').change(function(){
 
+            google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot()
+                    }
+
+                );
+
+                //document.write(input['product']);
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/BatchDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#bproduct_name').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#bbatch_number").empty();
+                        $("#bbatch_number").append($('<option>',{value: "All",text: "All"}));
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#bbatch_number").append($('<option>',{value: name,text: name}));
+
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#bbatch_number').change(function(){
+            google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot()
+                    }
+
+                );
+
+            });
+        });
+</script>
 <script type="text/javascript" >
 $( document ).ready(function() {
             $('#batch_number').change(function(){
