@@ -91,16 +91,15 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'NAME': 'ebdb',
-            'USER': 'root',
-            'PASSWORD': 'mysql123',
-            'HOST': 'aa17zrjytsb1e8p.c4ubrs2xpbu6.ap-south-1.rds.amazonaws.com',
-            'PORT': '3306',
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                'NAME': 'ebdb',
+                'USER': 'root',
+                'PASSWORD': 'mysql123',
+                'HOST': ' aa1mwaltkxhf1if.c4ubrs2xpbu6.ap-south-1.rds.amazonaws.com',
+                'PORT': '3306',
         }
     }
 
