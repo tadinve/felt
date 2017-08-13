@@ -5,8 +5,8 @@ from django.db import connection
 from roche_app.models import *
 from django.db.models import Q
 import collections, csv
-import pandas as pd
-import matplotlib.pyplot as plt
+#import pandas as pd
+#import matplotlib.pyplot as plt
 
 
 def GetDataForChart():
