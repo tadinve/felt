@@ -98,7 +98,7 @@ DATABASES = {
                 'NAME': 'ebdb',
                 'USER': 'root',
                 'PASSWORD': 'mysql123',
-                'HOST': ' aa1mwaltkxhf1if.c4ubrs2xpbu6.ap-south-1.rds.amazonaws.com',
+                'HOST': 'aa1mwaltkxhf1if.c4ubrs2xpbu6.ap-south-1.rds.amazonaws.com',
                 'PORT': '3306',
         }
     }
