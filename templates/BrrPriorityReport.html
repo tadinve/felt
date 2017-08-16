@@ -126,7 +126,7 @@
             </tr>
             {% for row in BrrReport %}
             <tr>
-                <td style="text-align:center;"><font size="1" >NULL</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row.Order }}</font></td>
                 <td style="text-align:center;"><font size="1" >{{ row.Material }}</font></td>
                 <td style="text-align:center;"><font size="1" >{{ row|getkey:'Short text for inspection object' }}
                 </font></td>
