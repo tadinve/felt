@@ -5,7 +5,7 @@ from django.db import connection
 from roche_app.models import *
 from django.db.models import Q
 import collections, csv
-#import pandas as pd
+import pandas as pd
 #import matplotlib.pyplot as plt
 
 
@@ -123,17 +123,22 @@ def GetChartFromDateAndTo(p,pn,bn,fd,td):
 def GetBoxPlotChart(p,pn,bn,fd,td,process_name):
 	format = "%d-%M-%Y"
 	str1 = str()
+	rows = []
 	dict3 = {'PO Create to PO Release':'po_create_to_po_release', 'PO Release to Pkg Start':' po_release_to_pkg_start', 'Pkg Start to Pkg Finish':'pkg_start_to_pkg_finish', 'Pkg Finish to Pkg Final Check': 'pkg_finish_to_pkg_final_check','Pkg Final Check to BRR Begin':'pkg_final_check_to_brr_begin','BRR Begin To BRR Finish': 'brr_begin_to_brr_finish', 'BRR Finish to QP Release':'brr_finish_to_qp_release' }
-	if (p == "all" or p == "All"):
+	if process_name == 'End to End':
+		rows = getDataForEndToEnd(p,pn,bn,fd,td,process_name)
+	elif (p == "all" or p == "All"):
 		str1 = "select product,"+dict3[process_name]+" from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"';"
+		rows = GetDataFromDatabase(str1)
 	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
 		str1 = "select product_name, "+dict3[process_name]+" from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product = '"+p+"' ;"
+		rows = GetDataFromDatabase(str1)
 	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
 		str1 = "select batch_number, "+dict3[process_name]+" from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"';"
+		rows = GetDataFromDatabase(str1)
 	elif (bn != "all" or bn !="All"):
 		str1 = "select batch_number, "+dict3[process_name]+" from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and batch_number = '"+bn+"' ;"
-	print(str1)
-	rows = GetDataFromDatabase(str1)
+		rows = GetDataFromDatabase(str1)
 	lis=list()
 	dict2 = {}
 	boxPlot = []
@@ -145,3 +150,22 @@ def GetBoxPlotChart(p,pn,bn,fd,td,process_name):
 		#print(df)
 		boxPlot.append({'element': element, 'min':float(df.min() if df.min() != 0 else 0),'max':float(df.max() if df.max() !=0 else 0),'median':float(df.median() if df.median() !=0 else 0),'Q1':int(df.quantile(.25) if df.quantile(.25) !=0 else 0),'Q3':int(df.quantile(.75) if df.quantile(.75) !=0 else 0)})
 	return boxPlot
+
+def getDataForEndToEnd(p,pn,bn,fd,td,process_name):
+	format = "%d-%M-%Y"
+	str1 = str()
+	dict3 = {'PO Create to PO Release':'po_create_to_po_release', 'PO Release to Pkg Start':' po_release_to_pkg_start', 'Pkg Start to Pkg Finish':'pkg_start_to_pkg_finish', 'Pkg Finish to Pkg Final Check': 'pkg_finish_to_pkg_final_check','Pkg Final Check to BRR Begin':'pkg_final_check_to_brr_begin','BRR Begin To BRR Finish': 'brr_begin_to_brr_finish', 'BRR Finish to QP Release':'brr_finish_to_qp_release' }
+	if (p == "all" or p == "All"):
+		str1 = "select product,(po_create_to_po_release + po_release_to_pkg_start + pkg_start_to_pkg_finish + pkg_finish_to_pkg_final_check + pkg_final_check_to_brr_begin + brr_begin_to_brr_finish + brr_finish_to_qp_release) from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"';"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
+		str1 = "select product_name, (po_create_to_po_release + po_release_to_pkg_start + pkg_start_to_pkg_finish + pkg_finish_to_pkg_final_check + pkg_final_check_to_brr_begin + brr_begin_to_brr_finish + brr_finish_to_qp_release) from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product = '"+p+"' ;"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
+		str1 = "select batch_number, (po_create_to_po_release + po_release_to_pkg_start + pkg_start_to_pkg_finish + pkg_finish_to_pkg_final_check + pkg_final_check_to_brr_begin + brr_begin_to_brr_finish + brr_finish_to_qp_release) from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"';"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch_number, (po_create_to_po_release + po_release_to_pkg_start + pkg_start_to_pkg_finish + pkg_finish_to_pkg_final_check + pkg_final_check_to_brr_begin + brr_begin_to_brr_finish + brr_finish_to_qp_release) from roche_app_rochenewmodel where str_to_date(process_order_creation_date,'"+format+"') Between '"+fd+"' and '"+td+"' and batch_number = '"+bn+"' ;"
+	rows = GetDataFromDatabase(str1)
+	lis=list()
+	dict2 = {}
+	boxPlot = []
+	uniq_elements = dict((x[0],[]) for x in rows)
+	return rows
