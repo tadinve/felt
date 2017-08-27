@@ -125,6 +125,7 @@ def BoxPlotChart(request):
 	data = Reports.GetBoxPlotChart(product,product_name,batch_number,from_date,to_date,process_name)
 	#print(data)
 	#products = Reports.GetAllProducts()
+	print(data)
 	response = HttpResponse(json.dumps(data))
 	return response
 
