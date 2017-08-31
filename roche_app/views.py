@@ -129,7 +129,25 @@ def BoxPlotChart(request):
 	response = HttpResponse(json.dumps(data))
 	return response
 
+def GetLineChartDetails(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	process_name = request.GET.get('processName',None)
+	#print(process_name)
+	#print(product,product_name,batch_number,from_date,to_date)
+	data = Reports.GetLineChartDetails(product,product_name,batch_number,from_date,to_date,process_name)
+	#print(data)
+	#products = Reports.GetAllProducts()
+	#print(data)
+	response = HttpResponse(json.dumps(data))
+	return response
+
 
 @register.filter(name='getkey')
 def getkey(value, arg):
     return value[arg]
+
+

@@ -119,10 +119,11 @@
         <div class="panel with-nav-tabs panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li ><a href="#tab1default" data-toggle="tab">Tableau</a></li>
-                    <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Stacked Bar Chart</a></li>
-                    <li><a href="#tab3default" data-toggle="tab">Box Plot</a></li>
-                    <li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot</a></li>
+                    <li ><a href="#tab1default" data-toggle="tab">Tableau Stacked Bar Chart</a></li>
+                    <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li>
+                    <li><a href="#tab3default" data-toggle="tab">Tableau Box Plot Chart</a></li>
+                    <li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot Chart</a></li>
+                    <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -185,10 +186,99 @@
                             
                           </div>
                     </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab1default">
-                        <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1298px; height: 573px;'><object class='tableauViz' width='100%' height='573' style='display:none;'><param name='host_url' value='https%3A%2F%2Fus-east-1.online.tableau.com%2F' /> <param name='site_root' value='&#47;t&#47;solivarlabs' /><param name='name' value='StackedBarChart&#47;StackedBarChart' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /><param name='showShareOptions' value='true' /></object></div>
+            </div>
+            <div class="tab-pane fade" id="tab5default">
+                <div class="row">
+                <div class="panel">
+                <div class="panel-body">
+                  <div class="row">
+
+                      <div class="col-lg-2">
+                          <label for="from">From:</label>
+                          <input type="date" class="form-control" id="sfrom" value="{{ mindate }}" >
                       </div>
+                      <div class="col-lg-2 divide">
+                          <label for="to">To:</label>
+                          <input type="date" class="form-control" id="sto" value="{{ maxdate }}" >
+                      </div>
+                      <div class="col-lg-2 ">
+                          <label for="to">Process:</label>
+                          <select class="form-control" id="sprocessName">
+                              <option value="End to End">End to End</option>
+                              <option value="PO Create to PO Release">PO Create to PO Release</option>
+                              <option value="PO Release to Pkg Start">PO Release to Pkg Start</option>
+                              <option value="Pkg Start to Pkg Finish">Pkg Start to Pkg Finish</option>
+                              <option value="Pkg Finish to Pkg Final Check">Pkg Finish to Pkg Final Check</option>
+                              <option value="Pkg Final Check to BRR Begin">Pkg Final Check to BRR Begin</option>
+                              <option value="BRR Begin To BRR Finish">BRR Begin To BRR Finish</option>
+                              <option value="BRR Finish to QP Release">BRR Finish to QP Release</option>
+                          </select>
+                          
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Family:</label>
+                          <select class="form-control" id="sproduct" >
+                              <option value="all">All</option>
+                              {% for product in products %}
+                              <option value='{{ product }}'>{{ product }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Name:</label>
+                          <select class="form-control" id="sproduct_name" >
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Batch Number:</label>
+                          <select class="form-control" id="sbatch_number" >
+                              <option value="all">All</option>
+                          </select>
+                      </div>
+                                           
+                  </div>
+                </div>
+              </div>
+                         
+                      <div id="CustomLineChart">
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                       function drawCurveTypes() {
+                            var data;
+                            $.getJSON('/roche/GetLineChartDetails/', {'product_name': $('#sproduct_name').val(),'product' : $('#sproduct').val(),'batch_number': $('#sbatch_number').val(),'fromDate': $('#sfrom').val(),'toDate': $('#sto').val(), 'processName': $('#sprocessName').val() } ,function(json) {
+
+                              var data = new google.visualization.DataTable();
+                                data.addColumn('string', 'Process Creation Date (Month)');
+                                data.addColumn('number', $('#sprocessName').val());
+                                //alert(json);
+                                for ( var i= 0; i < json.length; i++)
+                                 {
+                                   //document.write(json[i]);
+                                   data.addRow([json[i][0],json[i][1]]);
+                                 }
+                                
+
+                                var options = {
+                                         title: "Line Chart",
+                                         legend: { position: 'right', title: $('#sprocessName').val() },
+                                         width: 1100,
+                                         height: 500,
+                                       };
+
+                                var chart = new google.visualization.LineChart(document.getElementById('CustomLineChart'));
+                                chart.draw(data, options);
+
+                            });
+                                
+                              }
+                        </script>
+                     </div>
+                    </div>
+            </div>
+            <div class="tab-pane fade" id="tab1default">
+                <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1298px; height: 573px;'><object class='tableauViz' width='100%' height='573' style='display:none;'><param name='host_url' value='https%3A%2F%2Fus-east-1.online.tableau.com%2F' /> <param name='site_root' value='&#47;t&#47;solivarlabs' /><param name='name' value='StackedBarChart&#47;StackedBarChart' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /><param name='showShareOptions' value='true' /></object></div>
+              </div>
               <div class="tab-pane fade in active" id="tab2default">
               <div class="panel">
                 <div class="panel-body">
@@ -459,8 +549,31 @@
                                               // data.addRow([json[i][0],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5],json[i][1],json[i][2],json[i][4],json[i][3],json[i][5]]);
                                                data.addRow([json[i]['element'],json[i]['min'],json[i]['max'],json[i]['Q1'],json[i]['median'],json[i]['Q3'],json[i]['min'],json[i]['max'],json[i]['Q1'],json[i]['median'],json[i]['Q3']]);
                                              }
+                                  var p = $('#bproduct').val();
+                                  var pn = $('#bproduct_name').val();
+                                  var bn = $('#bbatch_number').val();
+                                  var pro = $('#processName').val();
+                                  var s;
+                                  if (p == "all" || p == "All"){
+                                      s = "Box Plot Chart for " + "all Products " + " ( "+pro+" )" + " from "+$('#bfrom').val()+ " to "+ $('#bto').val();
+                                  }
+                                  else if ((p != "all" || p != "All") && (pn == "All" || pn == "all" || pn == ""))
+                                  {
+                                        s ="Box Plot Chart for " + "all Products of "+ p + " "+" ( "+pro+" )"+ "  from "+$('#bfrom').val()+ " to "+ $('#bto').val() ;
+                                      }
+                                  else if ((pn != "all" || p != "All") && (bn == "all" || bn == "All"))
+                                    {
+                                     s ="Box Plot Chart for " + "all batches of Product "+ pn + " "+ " ( "+pro+" )"+ "  from "+$('#bfrom').val()+ " to "+ $('#bto').val();
+
+                                     }
+                                  else if (bn != "all" || bn !="All")
+                                     {
+                                      s ="Box Plot Chart for " + "Prodcut "+ pn +" "+ "Batch "+ bn + " "+ " ( "+pro+" )"+ "  from "+$('#bfrom').val()+ " to "+ $('#bto').val();
+                                     } 
+                                  
+                                   
                                    var options = {
-                                        title:'Box Plot Chart for' + " "+ $('#bproduct_name').val() + $('#bproduct').val() + $('#bbatch_number').val() + $('#bfrom').val() + $('#bto').val() + $('#processName').val(),
+                                        title: s,
                                         height: 500,
                                         width: 1200,
                                         legend: {position: 'none'},
@@ -541,6 +654,18 @@ $("#tab4atag").click(function(event)
                 );
 });
 </script>
+<script type="text/javascript" >
+$("#tab5atag").click(function(event)
+{
+ google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
+                        
+                    }
+
+                );
+});
+</script>
 <script type="text/javascript">
   $("#to").change(function(event)
 {
@@ -552,6 +677,17 @@ $("#tab4atag").click(function(event)
                 );
 });
 
+</script>
+<script type="text/javascript" >
+$("#sfrom").change(function(event)
+{
+google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
+                    }
+
+                );
+});
 </script>
 <script type="text/javascript" >
 $("#bfrom").change(function(event)
@@ -570,6 +706,18 @@ $("#bfrom").change(function(event)
  google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawBoxPlot();
+                    }
+
+                );
+});
+
+</script>
+<script type="text/javascript">
+  $("#sto").change(function(event)
+{
+google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
                     }
 
                 );
@@ -646,6 +794,47 @@ $( document ).ready(function() {
                             var name = response[i];
                             //document.write(name);
                             $("#bproduct_name").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#sproduct').change(function(){
+                google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
+                    }
+
+                );
+
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/ProductDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#sproduct').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#sproduct_name").empty();
+                        $("#sproduct_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#sbatch_number").empty();
+                        $("#sbatch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#sproduct_name").append($('<option>',{value: name,text: name}));
 
                         }                      
                         
@@ -738,10 +927,62 @@ $( document ).ready(function() {
 </script>
 <script type="text/javascript" >
 $( document ).ready(function() {
+            $('#sproduct_name').change(function(){
+
+            google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
+                    }
+
+                );
+
+                //document.write(input['product']);
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/BatchDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#sproduct_name').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#sbatch_number").empty();
+                        $("#sbatch_number").append($('<option>',{value: "All",text: "All"}));
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#sbatch_number").append($('<option>',{value: name,text: name}));
+
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
             $('#bbatch_number').change(function(){
             google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawBoxPlot();
+                    }
+
+                );
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#sbatch_number').change(function(){
+            google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
                     }
 
                 );
@@ -768,6 +1009,20 @@ $( document ).ready(function() {
             google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawBoxPlot();
+                        
+                    }
+
+                );
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#sprocessName').change(function(){
+            google.charts.load('current', {packages: ['corechart', 'line']});
+                google.charts.setOnLoadCallback(function (){
+                        drawCurveTypes();
                         
                     }
 
