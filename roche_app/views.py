@@ -9,7 +9,7 @@ from django.template import RequestContext
 import json
 from django.template.defaulttags import register
 
-def login(request):
+def login(request): # Fucntion for handling login requests
 	# context = RequestContext(request, {
 	#     'request': request, 'user': request.user})
 	# return render_to_response('login.html', context_instance=context)
@@ -17,7 +17,7 @@ def login(request):
 
 
 @login_required(login_url='/')
-def home(request):
+def home(request): # function for handling request from home tab.
 	authenticate = check_for_domain(request)
 	if authenticate:
 		lis = Reports.GetDataForChart()
@@ -29,25 +29,26 @@ def home(request):
 		return render_to_response('login.html')
 
 
-def logout(request):
+def logout(request): # Fucntion for handling logout requests
 	auth_logout(request)
 	return redirect('/')
 
 @login_required(login_url='/')
-def BrrPriorityReport(request):
+def BrrPriorityReport(request): #function for handling BRR Report Tab requests
 	lis = Reports.GetDataForChart()
 	BrrReport=Reports.GetBrrReport()
 	#print(BrrReport)
 	return render_to_response('BrrPriorityReport.html', {'rdata': json.dumps(lis), 'user': request.user, 'BrrReport': BrrReport})
 
 @login_required(login_url='/')
-def dashboard(request):
+def dashboard(request): #function for handling Dashboard Tab requests
 	authenticate = check_for_domain(request)
 	if authenticate:
 		lis = Reports.GetDataForChart()
 		RocheObjProduct = Reports.GetAllProducts()
 		DateObj = Reports.GetMinMaxDateFromDatabase()
-		return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate':DateObj[0][0],'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
+		print(type(DateObj[0][0]))
+		return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate': DateObj[0][0] ,'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
 	else:
 		HttpResponse("Invalid user")
 		logout(request)
@@ -56,19 +57,19 @@ def dashboard(request):
 
 #@app.route("roche/details/",methods=['GET','POST'])
 #@login_required(login_url='/')
-def ProductDetails(request):
+def ProductDetails(request): # Function for handling Get request from Dashboard  Product details for filter.
 	product = request.GET.get('product_name',None)
 	product_names = Reports.GetProductName(product)
 	response = HttpResponse(json.dumps(product_names))
 	return response
 
-def BatchDetails(request):
+def BatchDetails(request):# Function for handling Get request from Dashboard  Batch details for filter.
 	product_name = request.GET.get('product_name',None)
 	batch_number = Reports.GetBatchNumber(product_name)
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
-def ProductNameChartDetails(request):
+def ProductNameChartDetails(request):# Function for handling Get request from Dashboard  Product Name details for stacked bar chart.
 	product = request.GET.get('product',None)
 	from_date = request.GET.get('fromDate',None)
 	to_date = request.GET.get('toDate',None)
@@ -76,7 +77,7 @@ def ProductNameChartDetails(request):
 	response = HttpResponse(json.dumps(product_names))
 	return response
 
-def BatchNumberChartDetails(request):
+def BatchNumberChartDetails(request):# Function for handling Get request from Dashboard  batch number details for stacked bar chart.
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	from_date = request.GET.get('fromDate',None)
@@ -85,14 +86,14 @@ def BatchNumberChartDetails(request):
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
-def check_for_domain(request):
+def check_for_domain(request):# Function for checking domain name of user's login id to restrict them from un authorised access.
 	email = request.user.email.split("@")[1]
 	if email in ['roche.com','solivarlabs.com','solivar.com']:
 		return True
 	else:
 		return False
 
-def BatchNumberChartDetailsFinal(request):
+def BatchNumberChartDetailsFinal(request):# Function for handling Get request from Dashboard  batch number details( Single ) for stacked bar chart.
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	batch_number = request.GET.get('batch_number',None)
@@ -103,7 +104,7 @@ def BatchNumberChartDetailsFinal(request):
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
-def ChartWithDate(request):
+def ChartWithDate(request): # Function for handling Requests from dashboard when date filters are changed.
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	batch_number = request.GET.get('batch_number',None)
@@ -113,7 +114,7 @@ def ChartWithDate(request):
 	response = HttpResponse(json.dumps(data))
 	return response
 
-def BoxPlotChart(request):
+def BoxPlotChart(request):# Function for handling Requests from dashboard when Box plot filters are applied.
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	batch_number = request.GET.get('batch_number',None)
@@ -129,7 +130,7 @@ def BoxPlotChart(request):
 	response = HttpResponse(json.dumps(data))
 	return response
 
-def GetLineChartDetails(request):
+def GetLineChartDetails(request):# Function for handling Requests from dashboard when Line chart filters are applied.
 	product = request.GET.get('product',None)
 	product_name = request.GET.get('product_name',None)
 	batch_number = request.GET.get('batch_number',None)

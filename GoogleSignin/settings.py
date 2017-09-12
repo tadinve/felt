@@ -95,7 +95,7 @@ DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.mysql',
                 #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-                'NAME': 'Roche',
+                'NAME': 'cleaned_db_Roche',
                 'USER': 'root',
                 'PASSWORD': 'mysql',
                 'HOST': 'localhost',
