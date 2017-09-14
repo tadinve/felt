@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 from django.conf import settings
-
+from datetime import datetime
 # Create your models here.
 
 '''class Roche(models.Model):
@@ -63,3 +63,18 @@ class RocheNewModel(models.Model):
 
     def __str__(self):
         return str(self.product_name)
+
+class LoginDetails(models.Model):
+    user_id = models.CharField(max_length=50, blank=True, null=True)
+    login_time = models.DateTimeField(default=datetime.now, blank=True)
+    logout_time = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return str(self.user_id)
+
+class UserAuthentication(models.Model):
+    user_id = models.CharField(max_length=50)
+    authorized = models.CharField(max_length=10,default="FALSE")
+
+    def __str__(self):
+        return str(self.authorized)

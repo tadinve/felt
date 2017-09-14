@@ -3,11 +3,13 @@ from django.shortcuts import render_to_response, redirect, render
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from roche_app import Reports
+from roche_app.models import *
 # from django.template.context import RequestContext
 from django.http import HttpResponse
 from django.template import RequestContext
 import json
 from django.template.defaulttags import register
+from django.core.exceptions import *
 
 def login(request): # Fucntion for handling login requests
 	# context = RequestContext(request, {
@@ -18,15 +20,14 @@ def login(request): # Fucntion for handling login requests
 
 @login_required(login_url='/')
 def home(request): # function for handling request from home tab.
-	authenticate = check_for_domain(request)
+	authenticate = check_for_authentication(request)
 	if authenticate:
 		lis = Reports.GetDataForChart()
 		#print(lis)
 		return render_to_response('home.html', {'rdata': json.dumps(lis), 'user': request.user})
 	else:
-		HttpResponse("Invalid user")
 		logout(request)
-		return render_to_response('login.html')
+		return render(HttpResponse("Invalid user"),'login.html')
 
 
 def logout(request): # Fucntion for handling logout requests
@@ -47,7 +48,7 @@ def dashboard(request): #function for handling Dashboard Tab requests
 		lis = Reports.GetDataForChart()
 		RocheObjProduct = Reports.GetAllProducts()
 		DateObj = Reports.GetMinMaxDateFromDatabase()
-		print(type(DateObj[0][0]))
+		print((DateObj[0][0]))
 		return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate': DateObj[0][0] ,'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
 	else:
 		HttpResponse("Invalid user")
@@ -87,10 +88,14 @@ def BatchNumberChartDetails(request):# Function for handling Get request from Da
 	return response
 
 def check_for_domain(request):# Function for checking domain name of user's login id to restrict them from un authorised access.
-	email = request.user.email.split("@")[1]
-	if email in ['roche.com','solivarlabs.com','solivar.com']:
-		return True
-	else:
+	email = request.user.email
+	try:
+		authorized_email = UserAuthentication.objects.get(user_id=email)
+		if authorized_email.authorized == '1':
+			return True
+		else:
+			return False
+	except ObjectDoesNotExist as e:
 		return False
 
 def BatchNumberChartDetailsFinal(request):# Function for handling Get request from Dashboard  batch number details( Single ) for stacked bar chart.
