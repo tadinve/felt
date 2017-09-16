@@ -1,0 +1,1 @@
+ssh -i "New-FELT-Dashboard.pem" ubuntu@ec2-18-194-30-212.eu-central-1.compute.amazonaws.com
