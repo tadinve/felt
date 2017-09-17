@@ -1,1 +1,11 @@
+#Command for SSH
 ssh -i "New-FELT-Dashboard.pem" ubuntu@ec2-18-194-30-212.eu-central-1.compute.amazonaws.com
+
+#Command to start web server for DEV
+screen
+python3 manage.py runserver ec2-18-194-30-212.eu-central-1.compute.amazonaws.com:8000
+CtrA
+CtrD
+
+#Command to start web server for TEST
+python3 manage.py runserver ec2-18-194-30-212.eu-central-1.compute.amazonaws.com:8080
