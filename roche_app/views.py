@@ -89,14 +89,19 @@ def BatchNumberChartDetails(request):# Function for handling Get request from Da
 
 def check_for_authentication(request):# Function for checking domain name of user's login id to restrict them from un authorised access.
 	email = request.user.email
-	try:
+	domain = email.split('@')[1]
+	if domain in ['roche.com','solivarlabs.com','contractors.roche.com']:
+		return True
+	else:
+		return False
+	'''try:
 		authorized_email = UserAuthentication.objects.get(user_id=email)
 		if authorized_email.authorized == '1':
 			return True
 		else:
 			return False
 	except ObjectDoesNotExist as e:
-		return False
+		return False'''
 
 def BatchNumberChartDetailsFinal(request):# Function for handling Get request from Dashboard  batch number details( Single ) for stacked bar chart.
 	product = request.GET.get('product',None)
