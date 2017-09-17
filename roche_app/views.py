@@ -43,7 +43,7 @@ def BrrPriorityReport(request): #function for handling BRR Report Tab requests
 
 @login_required(login_url='/')
 def dashboard(request): #function for handling Dashboard Tab requests
-	authenticate = check_for_domain(request)
+	authenticate = check_for_authentication(request)
 	if authenticate:
 		lis = Reports.GetDataForChart()
 		RocheObjProduct = Reports.GetAllProducts()
@@ -87,7 +87,7 @@ def BatchNumberChartDetails(request):# Function for handling Get request from Da
 	response = HttpResponse(json.dumps(batch_number))
 	return response
 
-def check_for_domain(request):# Function for checking domain name of user's login id to restrict them from un authorised access.
+def check_for_authentication(request):# Function for checking domain name of user's login id to restrict them from un authorised access.
 	email = request.user.email
 	try:
 		authorized_email = UserAuthentication.objects.get(user_id=email)
