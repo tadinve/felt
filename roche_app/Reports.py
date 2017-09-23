@@ -95,7 +95,7 @@ def GetBrrReport(): #function for getting data for BRR report.
 	'''str1 = "select process_order_number,material_number,product_name,batch_number,packaging_final_check_date,batch_status, NULL,NULL,NULL,NULL,NULL,NULL from roche_app_rochenewmodel LIMIT 100;"
 	row = GetDataFromDatabase(str1)'''
 	li=list()
-	with open('BrrPriorityReport.csv') as file:
+	with open('Upload/BrrPriorityReportCleaned.csv') as file:
 		datafile = csv.DictReader(file)
 		for row in datafile:
 			li.append(row)
