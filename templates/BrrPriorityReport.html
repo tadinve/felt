@@ -114,6 +114,7 @@
                 <th style="text-align:center;">Process Order Number</th>
                 <th style="text-align:center;">Material Number</th>
                 <th style="text-align:center;">Product Name</th>
+                <th style="text-align:center;">Process order creation date</th>
                 <th style="text-align:center;">Batch Number</th>
                 <th style="text-align:center;">Packaging  Final Check Date</th>
                 <th style="text-align:center;">Batch Status</th>
@@ -126,22 +127,24 @@
             </tr>
             {% for row in BrrReport %}
             <tr>
-                <td style="text-align:center;"><font size="1" >{{ row.Order }}</font></td>
-                <td style="text-align:center;"><font size="1" >{{ row.Material }}</font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Short text for inspection object' }}
+                <td style="text-align:center;"><font size="1" >{{ row.process_order_number }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row.material_number }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'product_name' }}
                 </font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Batch' }}
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'process_order_creation_date' }}
                 </font></td>
-                <td style="text-align:center;"><font size="1" >NULL</font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Batch Status' }}</font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Insp. start date' }}
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'batch_number' }}
                 </font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'End of Inspection' }}
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'packaging_final_check_date' }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'batch_status' }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'inspection_lot_start_date' }}
                 </font></td>
-                <td style="text-align:center;"><font size="1" >NULL</font></td>
-                <td style="text-align:center;"><font size="1" >NULL</font></td>
-                <td style="text-align:center;"><font size="1" >NULL</font></td>
-                <td style="text-align:center;"><font size="1" >{{ row|getkey:'Requirement Date for the Component' }}
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'inspection_end_date' }}
+                </font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'brr_sample_check_end_date' }}</font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'brr_assistant_signoff_date' }}</font></td></font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'brr_reviewer_signoff_date' }}</font></td></font></td>
+                <td style="text-align:center;"><font size="1" >{{ row|getkey:'requirement_batch_date' }}
                 </font></td>
                   
             </tr>
