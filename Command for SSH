@@ -1,12 +1,16 @@
-You need to be in /Roche folder to perform this actions.
+# Code for cloning project folder :
+git clone -b felt-python https://github.com/tadinve/felt.git
+cd felt
 
+if you have already git cloned and your are in Roche folder ignore above code:
 
 #Command for SSH
+chmod 400 FELT-EC2.pem
 ssh -i "FELT-EC2.pem" ubuntu@ec2-52-57-162-130.eu-central-1.compute.amazonaws.com
 
 #Command to start web server for DEV
 cd FELT-NEW-DEV/felt
 screen
 python3 manage.py runserver ec2-52-57-162-130.eu-central-1.compute.amazonaws.com:8080
-CtrA
-CtrD
+Ctrl+A
+Ctrl+D
