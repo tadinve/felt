@@ -162,3 +162,5 @@ def getkey(value, arg):
     return value[arg]
 
 
+def StackedBarChart2(request):
+	

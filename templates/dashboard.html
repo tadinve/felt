@@ -123,7 +123,8 @@
                     <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li>
                     <li><a href="#tab3default" data-toggle="tab">Tableau Box Plot Chart</a></li>
                     <li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot Chart</a></li>
-                    <!--li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li-->
+                    <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li>
+                    <li><a href="#tab6default" data-toggle="tab" id="tab6atag">New Stack Chart</a></li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -275,6 +276,89 @@
                         </script>
                      </div>
                     </div>
+            </div>
+            <div class="tab-pane fade" id="tab6default">
+                <div class="row">
+                <div class="panel">
+                <div class="panel-body">
+                  <div class="row">
+
+                      <div class="col-lg-2">
+                          <label for="from">From:</label>
+                          <input type="date" class="form-control" id="s2from" value="{{ mindate }}" >
+                      </div>
+                      <div class="col-lg-2 divide">
+                          <label for="to">To:</label>
+                          <input type="date" class="form-control" id="s2to" value="{{ maxdate }}" >
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Family:</label>
+                          <select class="form-control" id="s2product" >
+                              <option value="all">All</option>
+                              {% for product in products %}
+                              <option value='{{ product }}'>{{ product }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Name:</label>
+                          <select class="form-control" id="s2product_name" >
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Batch Number:</label>
+                          <select class="form-control" id="s2batch_number" >
+                              <option value="all">All</option>
+                          </select>
+                      </div>
+                                           
+                  </div>
+                </div>
+              </div>
+                         
+                      <div id="StackedBarChart2">
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                       function drawstackbar() {
+                            var data;
+                            $.getJSON('/roche/StackedBarChart2/', {'product_name': $('#s2product_name').val(),'product' : $('#s2product').val(),'batch_number': $('#s2batch_number').val(),'fromDate': $('#s2from').val(),'toDate': $('#s2to').val(), 'processName': $('#s2processName').val() } ,function(json) {
+
+                              data = new google.visualization.DataTable();
+                                             data.addColumn('string', 'ProductName');
+                                             data.addColumn('number', 'Planning');
+                                             data.addColumn('number', 'Packaging');
+                                             data.addColumn('number', 'Quality');
+                                             //alert(data);
+                                             for ( var i= 0; i < json.length; i++)
+                                             {
+                                               //document.write(json[i]);
+                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3]]);
+                                             }
+
+
+                                             var options = {
+                                    title: "Stack Bar Chart for" + " " + $('#product').val()+ " "+" From "+$('#from').val() +" " + " "+" To"+ " " + $('#to').val(),
+                                    vAxis: {title: "Product Family"},
+                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
+                                    isStacked:true,
+                                    width: 1000,
+                                    height: 500,
+                                    legend: { position: 'right', maxLines: 3 },
+                                    bar: { groupWidth: '75%' },
+                                };  
+
+                             // Instantiate and draw the chart.
+                             var chart = new google.visualization.BarChart(document.getElementById('stackbar2'));
+                             chart.draw(data, options);
+
+                            });
+                                
+                              }
+                        </script>
+                     </div>
+                    </div>
+                    <div id="stackbar2"></div>
             </div>
             <div class="tab-pane fade" id="tab1default">
                 <script type='text/javascript' src='https://us-east-1.online.tableau.com/javascripts/api/viz_v1.js'></script>
@@ -653,11 +737,33 @@ $("#from").change(function(event)
 });
 </script>
 <script type="text/javascript" >
+$("#s2from").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
+                    }
+
+                );
+});
+</script>
+<script type="text/javascript" >
 $("#tab4atag").click(function(event)
 {
  google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawBoxPlot();
+                    }
+
+                );
+});
+</script>
+<script type="text/javascript" >
+$("#tab6atag").click(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
                     }
 
                 );
@@ -681,6 +787,18 @@ $("#tab5atag").click(function(event)
  google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawChart5();
+                    }
+
+                );
+});
+
+</script>
+<script type="text/javascript">
+  $("#s2to").change(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
                     }
 
                 );
@@ -762,6 +880,47 @@ $( document ).ready(function() {
                             var name = response[i];
                             //document.write(name);
                             $("#product_name").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#s2product').change(function(){
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
+                    }
+
+                );
+
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/ProductDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#s2product').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#s2product_name").empty();
+                        $("#s2product_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#s2batch_number").empty();
+                        $("#s2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#s2product_name").append($('<option>',{value: name,text: name}));
 
                         }                      
                         
@@ -897,6 +1056,45 @@ $( document ).ready(function() {
 </script>
 <script type="text/javascript" >
 $( document ).ready(function() {
+            $('#s2product_name').change(function(){
+
+            google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
+                    }
+
+                );
+
+                //document.write(input['product']);
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/BatchDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#s2product_name').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#s2batch_number").empty();
+                        $("#s2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#s2batch_number").append($('<option>',{value: name,text: name}));
+
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
             $('#bproduct_name').change(function(){
 
             google.charts.load('current', {'packages':['corechart']});
@@ -979,6 +1177,19 @@ $( document ).ready(function() {
             google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawBoxPlot();
+                    }
+
+                );
+
+            });
+        });
+</script>
+<script type="text/javascript" >
+$( document ).ready(function() {
+            $('#s2batch_number').change(function(){
+            google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawstackbar();
                     }
 
                 );

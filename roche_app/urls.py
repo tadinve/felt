@@ -29,5 +29,6 @@ urlpatterns = [
     url(r'^ChartWithDate/$', views.ChartWithDate,name="ChartWithDate"),
     url(r'^GetLineChartDetails/$', views.GetLineChartDetails,name="GetLineChartDetails"),
     url(r'^BoxPlotChart/$', views.BoxPlotChart,name="BoxPlotChart"),
+    url(r'^StackedBarChart2/$', views.StackedBarChart2,name="StackedBarChart2"),
     url(r'^logout/$',views.logout,name="logout"),
 ]
