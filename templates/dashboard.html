@@ -127,7 +127,7 @@
                     <li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot Chart</a></li>
                     <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li>
                     <li><a href="#tab6default" data-toggle="tab" id="tab6atag">Custom StackBar Chart For PA, PL, QA</a></li>
-                    <li><a href="#tab9default" data-toggle="tab" id="tab6atag">Custom Percentage Chart</a></li>
+                    <li><a href="#tab9default" data-toggle="tab" id="tab9atag">Custom Percentage Chart</a></li>
 
                 </ul>
             </div>
@@ -868,6 +868,17 @@ $("#tab6atag").click(function(event)
  google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawstackbar();
+                    }
+
+                );
+});
+</script>
+<script type="text/javascript" >
+$("#tab9atag").click(function(event)
+{
+ google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawpercentagebar();
                     }
 
                 );
