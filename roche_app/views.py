@@ -162,5 +162,29 @@ def getkey(value, arg):
     return value[arg]
 
 
-def StackedBarChart2(request):
+def GetPAPLQP(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
+	#print(process_name)
+	#print(product,product_name,batch_number,from_date,to_date)
+	data = Reports.GetPAPLQP(product,product_name,batch_number,from_date,to_date)
+	#print(data)
+	#products = Reports.GetAllProducts()
+	#print(data)
+	response = HttpResponse(json.dumps(data))
+	return response
 	
+def GetPAPLQPPercentage(request):
+	PA = request.GET.get('PA',None)
+	PL = request.GET.get('PL',None)
+	QA = request.GET.get('QA',None)
+	EE = request.GET.get('EE',None)
+	data = Reports.GetPAPLQPPercentage(PA,PL,QA,EE)
+	#print(data)
+	#products = Reports.GetAllProducts()
+	#print(data)
+	response = HttpResponse(json.dumps(data))
+	return response
