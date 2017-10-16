@@ -29,5 +29,7 @@ urlpatterns = [
     url(r'^ChartWithDate/$', views.ChartWithDate,name="ChartWithDate"),
     url(r'^GetLineChartDetails/$', views.GetLineChartDetails,name="GetLineChartDetails"),
     url(r'^BoxPlotChart/$', views.BoxPlotChart,name="BoxPlotChart"),
+    url(r'^GetPAPLQP/$', views.GetPAPLQP,name="GetPAPLQP"),
     url(r'^logout/$',views.logout,name="logout"),
+    url(r'^GetPAPLQPPercentage/$', views.GetPAPLQPPercentage,name="GetPAPLQPPercentage"),
 ]

@@ -192,7 +192,7 @@ def GetLineChartDetails(p,pn,bn,fd,td,process_name): #function to get data for l
 	return lis
 
 
-def getDataForEndToEndForLineChart(p,pn,bn,fd,td,process_name): #fcuntion to get data when there is  "ENd to End" selected in the filter.
+def getDataForEndToEndForLineChart(p,pn,bn,fd,td): #fcuntion to get data when there is  "ENd to End" selected in the filter.
 	format = "%d-%M-%Y"
 	format2 = "%Y-%m"
 	str1 = str()
@@ -208,3 +208,36 @@ def getDataForEndToEndForLineChart(p,pn,bn,fd,td,process_name): #fcuntion to get
 	print(str1)
 	rows = GetDataFromDatabase(str1)
 	return rows
+
+def GetPAPLQP(p,pn,bn,fd,td):
+	format = "%d-%M-%Y"
+	str1 = str()
+	print(p,pn,bn,fd,td)
+	if (p == "all" or p == "All"):
+		str1 = "select product, avg(PL), avg(PA), avg(QA) from roche_app_rochenewmodel where process_order_creation_date Between '"+fd+"' and '"+td+"' group by product;"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
+		str1 = "select product_name, avg(PL), avg(PA), avg(QA) from roche_app_rochenewmodel where process_order_creation_date Between '"+fd+"' and '"+td+"' and product = '"+p+"' group by product_name;"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
+		str1 = "select batch_number, avg(PL), avg(PA), avg(QA) from roche_app_rochenewmodel where process_order_creation_date Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch_number;"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch_number, avg(PL), avg(PA), avg(QA) from roche_app_rochenewmodel where process_order_creation_date Between '"+fd+"' and '"+td+"' and batch_number = '"+bn+"';"
+	print(str1)
+	rows = GetDataFromDatabase(str1)
+	lis=list()
+	for row in rows:
+		lis.append([row[0],float(row[1]),float(row[2]),float(row[3])])
+	return lis
+
+def GetPAPLQPPercentage(PA,PL,QA,EE):
+	datasql = "select PL,PA,QA from roche_app_rochenewmodel;"
+	data = GetDataFromDatabase(datasql)
+	df = pd.DataFrame(data, columns=["PL","PA","QA"])
+	#print(PA,PL,QA,EE)
+	count = df.count()
+	#print(df[df['PL'] < int(PL)])
+	PAp = df[df['PA'] < int(PA)].count() / count['PA'] * 100
+	QAp = df[df['QA'] < int(QA)].count() / count['QA'] * 100
+	PLp = df[df['PL'] < int(PL)].count() / count['PL'] * 100
+	#print(PAp['PA'],QAp['QA'],PLp['PL'])
+	lis = [['PA',int(PAp['PA'])],['QA',int(QAp['QA'])],['PL',int(PLp['PL'])]]
+	return lis
