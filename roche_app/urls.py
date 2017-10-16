@@ -32,4 +32,10 @@ urlpatterns = [
     url(r'^GetPAPLQP/$', views.GetPAPLQP,name="GetPAPLQP"),
     url(r'^logout/$',views.logout,name="logout"),
     url(r'^GetPAPLQPPercentage/$', views.GetPAPLQPPercentage,name="GetPAPLQPPercentage"),
+    url(r'^YieldPlant/$', views.YieldPlant,name="YieldPlant"),
+    url(r'^YieldPlantDetails/$', views.YieldPlantDetails,name="YieldPlantDetails"),
+    url(r'^YieldProductDetails/$', views.YieldProductDetails,name="YieldProductDetails"),
+    url(r'^YieldProductNameDetails/$', views.YieldProductNameDetails,name="YieldProductNameDetails"),
+    url(r'^YieldChartDetails/$', views.YieldChartDetails,name="YieldChartDetails"),
 ]
+

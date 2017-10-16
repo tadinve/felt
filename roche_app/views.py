@@ -48,7 +48,7 @@ def dashboard(request): #function for handling Dashboard Tab requests
 		lis = Reports.GetDataForChart()
 		RocheObjProduct = Reports.GetAllProducts()
 		DateObj = Reports.GetMinMaxDateFromDatabase()
-		print((DateObj[0][0]))
+		#print((DateObj[0][0]))
 		return render_to_response('dashboard.html',{'rdata': json.dumps(lis),'mindate': DateObj[0][0] ,'maxdate': DateObj[0][1], 'products': RocheObjProduct, 'user': request.user},RequestContext(request))
 	else:
 		HttpResponse("Invalid user")
@@ -186,5 +186,42 @@ def GetPAPLQPPercentage(request):
 	#print(data)
 	#products = Reports.GetAllProducts()
 	#print(data)
+	response = HttpResponse(json.dumps(data))
+	return response
+
+def YieldPlant(request):
+	data = Reports.YieldPlant()
+	response = HttpResponse(json.dumps(data))
+	return response
+
+def YieldPlantDetails(request):
+	plant = request.GET.get('plant_name',None)
+	products = Reports.GetYieldProduct(plant)
+	response = HttpResponse(json.dumps(products))
+	return response
+
+def YieldProductDetails(request):
+	plant = request.GET.get('plant_name',None)
+	product = request.GET.get('product',None)
+	product_name = Reports.GetYieldProductName(plant,product)
+	response = HttpResponse(json.dumps(product_name))
+	return response
+
+def YieldProductNameDetails(request):
+	plant = request.GET.get('plant_name',None)
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch = Reports.YieldProductNameDetails(plant,product,product_name)
+	response = HttpResponse(json.dumps(batch))
+	return response
+
+def YieldChartDetails(request):
+	plant = request.GET.get('plant_name',None)
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch = request.GET.get('batch_number',None)
+	tod = request.GET.get('toDate',None)
+	fromd = request.GET.get('fromDate',None)
+	data = Reports.YieldChartDetails(plant,product,product_name,batch,fromd,tod)
 	response = HttpResponse(json.dumps(data))
 	return response

@@ -241,3 +241,56 @@ def GetPAPLQPPercentage(PA,PL,QA,EE):
 	#print(PAp['PA'],QAp['QA'],PLp['PL'])
 	lis = [['PA',int(PAp['PA'])],['QA',int(QAp['QA'])],['PL',int(PLp['PL'])]]
 	return lis
+
+def YieldPlant():
+	plantname = "select distinct(Plant_Name) from YieldDB;"
+	data = GetDataFromDatabase(plantname)
+	format = "%Y-%m-%d"
+	str1 = "select date_format(min(Actual_finish),'"+format+"'),date_format(max(Actual_finish),'"+format+"') from YieldDB;"
+	date = GetDataFromDatabase(str1)
+	lis = [data,[str(date[0][0]),str(date[0][1])]]
+	print(lis)
+	return lis
+
+def GetYieldProduct(plant):
+	rows = GetDataFromDatabase('select Distinct(Product_Family) from YieldDB where Plant_Name = "'+plant+'"')
+	RocheProductList = list()
+	for row in rows:
+		RocheProductList.append(row[0])
+	return RocheProductList
+
+def GetYieldProductName(plant,product):
+	rows = GetDataFromDatabase('select Distinct(Product_Name) from YieldDB where Plant_Name = "'+plant+'" and Product_Family = "'+product+'"')
+	RocheProductList = list()
+	for row in rows:
+		RocheProductList.append(row[0])
+	return RocheProductList
+
+def YieldProductNameDetails(plant,product,product_name):
+	rows = GetDataFromDatabase('select Distinct(Batch) from YieldDB where Plant_Name = "'+plant+'" and Product_Family = "'+product+'" and product_Name = "'+product_name+'"')
+	RocheProductList = list()
+	for row in rows:
+		RocheProductList.append(row[0])
+	return RocheProductList
+
+def YieldChartDetails(pl,p,pn,bn,fd,td):
+	format = "%d-%M-%Y"
+	str1 = str()
+	print(pl,p,pn,bn,fd,td)
+	if (pl == "all" or pl == "All" or pl == ""):
+		str1 = "select plant_name, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' group by plant_name;"
+	elif (p == "all" or p == "All"):
+		str1 = "select Product_Family, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg)from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' group by product_family;"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
+		str1 = "select product_name, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_family = '"+p+"' group by product_name;"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
+		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch;"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and batch = '"+bn+"';"
+	#print(str1)
+	rows = GetDataFromDatabase(str1)
+	lis=list()
+	for row in rows:
+		lis.append([str(row[0]),float(row[1]),float(row[2]),float(row[3])])
+	#print(lis)
+	return lis

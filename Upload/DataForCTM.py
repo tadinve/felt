@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[49]:
+# In[2]:
 
 import pandas as pd
 import numpy as np
@@ -198,6 +198,48 @@ df7
 from sqlalchemy import create_engine
 engine = create_engine("mysql+mysqldb://root:"+'mysql'+"@localhost/cleaned_db_Roche")
 df7.to_sql(con=engine, if_exists='replace', name="roche_app_rochenewmodel",index=False)
+
+
+# In[57]:
+
+df8 = pd.read_csv('Modified Yield Data - Data.csv')
+
+
+# In[58]:
+
+df9 = df8.dropna()
+df9.info()
+df9
+
+
+# In[59]:
+
+df9['Actual finish'] = pd.to_datetime(df9['Actual finish'],errors='coerce',dayfirst=False)
+
+
+# In[60]:
+
+df9.info()
+
+
+# In[66]:
+
+df9.columns = [c.replace(' ', '_') for c in df9.columns]
+df9.columns = [c.replace('-', '_') for c in df9.columns]
+df9.replace('#DIV/0!', 0,inplace=True)
+df10 =df9[df9.columns[1:29]].join(df9[df9.columns[29:33]].replace('[\$,]', '', regex=True).astype(float))
+
+
+# In[62]:
+
+df10
+
+
+# In[68]:
+
+from sqlalchemy import create_engine
+engine = create_engine("mysql+mysqldb://root:"+'mysql'+"@localhost/cleaned_db_Roche")
+df10.to_sql(con=engine, if_exists='replace', name="YieldDB",index=False)
 
 
 # In[ ]:
