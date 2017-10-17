@@ -99,7 +99,7 @@
               <ul class="nav navbar-nav pull-right">
                  <li><a href="/roche/home">Home</a></li>
                 <li class="active"><a href="/roche/dashboard">Dashboard</a></li>
-                <li><a href="/roche/BrrPriorityReport">BRR Priority Report</a></li>
+                <!--li><a href="/roche/BrrPriorityReport">BRR Priority Report</a></li-->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                        Welcome, {{ user.username|title }}! &nbsp;<span class="caret"></span>
@@ -344,13 +344,37 @@
                                                //document.write(json[i]);
                                                data.addRow([json[i][0],json[i][1],json[i][2],json[i][3]]);
                                              }
+                                             var p = $('#yproduct').val();
+                                             var pn = $('#yproduct_name').val();
+                                             var bn = $('#ybatch_number').val();
+                                             var pro = $('#yplant_name').val();
+                                             var s,titlen;
+                                             if (p == "all" || p == "All"){
+                                                 s = "Stacked Bar Chart for Plant : "+pro+" from "+$('#yfrom').val()+ " to "+ $('#yto').val() ;
+                                                  titlen = "Plant Name";
+                                             }
+                                             else if ((p != "all" || p != "All") && (pn == "All" || pn == "all" || pn == ""))
+                                             {
+                                                   s ="Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+" from "+$('#yfrom').val()+ " to "+ $('#yto').val() ;
+                                                    titlen = "Product Family";
+                                                 }
+                                             else if ((pn != "all" || p != "All") && (bn == "all" || bn == "All"))
+                                               {
+                                                s = "Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+", Prodcut name : "+pn+" from "+$('#yfrom').val()+ " to "+ $('#yto').val() ;
+                                                 titlen = "Product Name";
 
+                                                }
+                                             else if (bn != "all" || bn !="All")
+                                                {
+                                                 s ="Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+", Prodcut name : "+pn+", Batch : "+bn+" from "+$('#yfrom').val()+ " to "+ $('#yto').val() ;
+                                                  titlen = "Batch";
+                                                }
 
                                              var options = {
-                                    title: "Stack Bar Chart for",
-                                    vAxis: {title: "Batch Number"},
-                                    hAxis : {title: "Days",viewWindow: { min : 0 }},
-                                    isStacked:true,
+                                    title: s,
+                                    vAxis: {title: titlen},
+                                    hAxis : {title: "Dollars",viewWindow: { min : 0 }},
+                                    isStacked: true,
                                     width: 1000,
                                     height: 500,
                                     legend: { position: 'right', maxLines: 3 },
@@ -427,10 +451,9 @@
                                                data.addRow([json[i][0],json[i][1],json[i][2],json[i][3]]);
                                              }
 
-
                                              var options = {
-                                    title: "Stack Bar Chart for" + " " + $('#product').val()+ " "+" From "+$('#from').val() +" " + " "+" To"+ " " + $('#to').val(),
-                                    vAxis: {title: "Product Family"},
+                                    title: "Stacked Bar Chart",
+                                    vAxis: {title: ""},
                                     hAxis : {title: "Days",viewWindow: { min : 0 }},
                                     isStacked:true,
                                     width: 1000,
@@ -459,7 +482,7 @@
 
                       <div class="col-lg-2">
                           <label for="from">PL (Planning): </label>
-                          <input type="text" class="form-control" id="PL" value="1" onkeypress="handle(event)">
+                          <input type="text" class="form-control" id="PL" value="18" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2 ">
                           <label for="from">PA (Packaging): </label>
@@ -467,11 +490,11 @@
                       </div>
                       <div class="col-lg-2">
                           <label for="from">QA (Quality): </label>
-                          <input type="text" class="form-control" id="QA" value="1" onkeypress="handle(event)">
+                          <input type="text" class="form-control" id="QA" value="16" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2">
                           <label for="from">EE (End to End): </label>
-                          <input type="text" class="form-control" id="EE" value="1" onkeypress="handle(event)">
+                          <input type="text" class="form-control" id="EE" value="10" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2">
                       </div>
@@ -506,6 +529,9 @@
                                              title: "Percentage Chart",
                                              width: 1000,
                                              height: 500,
+                                             vAxis: {title: "Process"},
+                                    hAxis : {title: "Percentage",viewWindow: { min : 0 }},
+                                             colors: ['#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
                                              legend: { position: 'right', maxLines: 3 },
                                              bar: { groupWidth: '75%' },
                                            };
