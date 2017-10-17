@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^YieldProductDetails/$', views.YieldProductDetails,name="YieldProductDetails"),
     url(r'^YieldProductNameDetails/$', views.YieldProductNameDetails,name="YieldProductNameDetails"),
     url(r'^YieldChartDetails/$', views.YieldChartDetails,name="YieldChartDetails"),
+    url(r'^YieldChartDetailsforKilos/$', views.YieldChartDetailsforKilos,name="YieldChartDetailsforKilos"),
 ]
 

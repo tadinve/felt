@@ -225,3 +225,16 @@ def YieldChartDetails(request):
 	data = Reports.YieldChartDetails(plant,product,product_name,batch,fromd,tod)
 	response = HttpResponse(json.dumps(data))
 	return response
+
+
+def YieldChartDetailsforKilos(request):
+	plant = request.GET.get('plant_name',None)
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch = request.GET.get('batch_number',None)
+	tod = request.GET.get('toDate',None)
+	fromd = request.GET.get('fromDate',None)
+	print(plant,product,product_name,batch,fromd,tod)
+	data = Reports.YieldChartDetailsforKilos(plant,product,product_name,batch,fromd,tod)
+	response = HttpResponse(json.dumps(data))
+	return response

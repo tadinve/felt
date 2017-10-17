@@ -295,3 +295,25 @@ def YieldChartDetails(pl,p,pn,bn,fd,td):
 		lis.append([str(row[0]),float(row[1]),float(row[2]),float(row[3])])
 	#print(lis)
 	return lis
+
+def YieldChartDetailsforKilos(pl,p,pn,bn,fd,td):
+	format = "%d-%M-%Y"
+	str1 = str()
+	print(pl,p,pn,bn,fd,td)
+	if (pl == "all" or pl == "All" or pl == ""):
+		str1 = "select plant_name, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' group by plant_name;"
+	elif (p == "all" or p == "All"):
+		str1 = "select Product_Family, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' group by product_family;"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
+		str1 = "select product_name, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_family = '"+p+"' group by product_name;"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
+		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch;"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and batch = '"+bn+"';"
+	print(str1)
+	rows = GetDataFromDatabase(str1)
+	lis=list()
+	for row in rows:
+		lis.append([str(row[0]),float(row[1]),float(row[2]),float(row[3])])
+	#print(lis)
+	return lis

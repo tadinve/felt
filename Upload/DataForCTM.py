@@ -227,6 +227,7 @@ df9.info()
 
 df9.columns = [c.replace(' ', '_') for c in df9.columns]
 df9.columns = [c.replace('-', '_') for c in df9.columns]
+df9.columns = [c.replace('\'', '') for c in df9.columns]
 df9.replace('#DIV/0!', 0,inplace=True)
 df10 =df9[df9.columns[1:29]].join(df9[df9.columns[29:33]].replace('[\$,]', '', regex=True).astype(float))
 

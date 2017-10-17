@@ -119,16 +119,17 @@
         <div class="panel with-nav-tabs panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li ><a href="#tab1default" data-toggle="tab">Tableau Stacked Bar Chart</a></li>
-                    <li><a href="#tab3default" data-toggle="tab">Tableau Box Plot Chart</a></li>
+                    <!--li ><a href="#tab1default" data-toggle="tab">Tableau Stacked Bar Chart</a></li>
+                    <li><a href="#tab3default" data-toggle="tab">Tableau Box Plot Chart</a></li-->
                     <li><a href="#tab7default" data-toggle="tab">New Tableau Percentage Chart</a></li>
-                    <li><a href="#tab8default" data-toggle="tab">New Tableau Table</a></li>
-                    <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li>
+                    <!--li><a href="#tab8default" data-toggle="tab">New Tableau Table</a></li>
+                    <li  id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li>
                     <li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot Chart</a></li>
-                    <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li>
-                    <li><a href="#tab6default" data-toggle="tab" id="tab6atag">Custom StackBar Chart For PA, PL, QA</a></li>
+                    <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li-->
+                    <li class="active"><a href="#tab6default" data-toggle="tab" id="tab6atag">Custom StackBar Chart For PA, PL, QA</a></li>
                     <li><a href="#tab9default" data-toggle="tab" id="tab9atag">Custom Percentage Chart</a></li>
-                    <li><a href="#tab10default" data-toggle="tab" id="tab10atag">Yield Chart</a></li>
+                    <li><a href="#tab10default" data-toggle="tab" id="tab10atag">Yield Chart For Dollar Lose</a></li>
+                    <li><a href="#tab11default" data-toggle="tab" id="tab11atag">Yield Chart For Kilos Lose </a></li>
 
                 </ul>
             </div>
@@ -335,14 +336,16 @@
                                              //alert(json);
                                              data = new google.visualization.DataTable();
                                              data.addColumn('string', 'Heading');
-                                             data.addColumn('number', 'Packed');
-                                             data.addColumn('number', 'Inspected');
-                                             data.addColumn('number', 'Filled');
+                                             data.addColumn('number', 'Lose while Filling');
+                                             data.addColumn('number', 'Lose while Inspection');
+                                             data.addColumn('number', 'Lose while Packing');
+                                             
+                                             
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i]);
-                                               data.addRow([json[i][0],json[i][1],json[i][2],json[i][3]]);
+                                               data.addRow([json[i][0],json[i][3],json[i][2],json[i][1]]);
                                              }
                                              var p = $('#yproduct').val();
                                              var pn = $('#yproduct_name').val();
@@ -383,6 +386,118 @@
 
                              // Instantiate and draw the chart.
                              var chart = new google.visualization.BarChart(document.getElementById('yieldchart'));
+                             chart.draw(data, options);
+
+                            });                             
+                          }
+                             
+                    </script>
+                          </div>
+                    </div>
+            </div>
+            <div class="tab-pane fade" id="tab11default">
+                <div class="row">
+                <div class="panel">
+                <div class="panel-body">
+                  <div class="row">
+
+                      <div class="col-lg-2">
+                          <label for="from">From:</label>
+                          <input type="date" class="form-control" id="y2from" value="{{ mindate }}" >
+                      </div>
+                      <div class="col-lg-2 divide">
+                          <label for="to">To:</label>
+                          <input type="date" class="form-control" id="y2to" value="{{ maxdate }}" >
+                      </div>
+                      <div class="col-lg-2 ">
+                          <label for="to">Plant Name</label>
+                               <select class="form-control" id="y2plant_name" >
+                              <option value="">All</option>
+                          </select>                    
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Family:</label>
+                          <select class="form-control" id="y2product" >
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Name:</label>
+                          <select class="form-control" id="y2product_name" >
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Batch Number:</label>
+                          <select class="form-control" id="y2batch_number" >
+                              <option value="all">All</option>
+                          </select>
+                      </div>
+                                           
+                  </div>
+                </div>
+              </div>
+                         
+                      <div id="YieldChartDetailsforKilos">
+                            <script type="text/javascript">
+
+                        function drawyieldchartforKilos() {
+                            var data;
+                            $.getJSON('/roche/YieldChartDetailsforKilos/', {'product_name': $('#y2product_name').val(),'product' : $('#y2product').val() ,'fromDate': $('#y2from').val(),'toDate': $('#y2to').val(), 'plant_name':$('#y2plant_name').val(), 'batch_number': $('#y2batch_number').val() } ,function(json) {
+
+                                             //alert(json);
+                                             data = new google.visualization.DataTable();
+                                             data.addColumn('string', 'Heading');
+                                             data.addColumn('number', 'Lose while Filling');
+                                             data.addColumn('number', 'Lose while Inspection');
+                                             data.addColumn('number', 'Lose while Packing');
+                                             
+                                             
+                                             //alert(data);
+                                             for ( var i= 0; i < json.length; i++)
+                                             {
+                                               //document.write(json[i]);
+                                               data.addRow([json[i][0],json[i][3],json[i][2],json[i][1]]);
+                                             }
+                                             var p = $('#y2product').val();
+                                             var pn = $('#y2product_name').val();
+                                             var bn = $('#y2batch_number').val();
+                                             var pro = $('#y2plant_name').val();
+                                             var s,titlen;
+                                             if (p == "all" || p == "All"){
+                                                 s = "Stacked Bar Chart for Plant : "+pro+" from "+$('#y2from').val()+ " to "+ $('#y2to').val() ;
+                                                  titlen = "Plant Name";
+                                             }
+                                             else if ((p != "all" || p != "All") && (pn == "All" || pn == "all" || pn == ""))
+                                             {
+                                                   s ="Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+" from "+$('#y2from').val()+ " to "+ $('#y2to').val() ;
+                                                    titlen = "Product Family";
+                                                 }
+                                             else if ((pn != "all" || p != "All") && (bn == "all" || bn == "All"))
+                                               {
+                                                s = "Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+", Prodcut name : "+pn+" from "+$('#y2from').val()+ " to "+ $('#y2to').val() ;
+                                                 titlen = "Product Name";
+
+                                                }
+                                             else if (bn != "all" || bn !="All")
+                                                {
+                                                 s ="Stacked Bar Chart for Plant : "+pro+", Product Family : "+p+", Prodcut name : "+pn+", Batch : "+bn+" from "+$('#y2from').val()+ " to "+ $('#y2to').val() ;
+                                                  titlen = "Batch";
+                                                }
+
+                                             var options = {
+                                    title: s,
+                                    vAxis: {title: titlen},
+                                    hAxis : {title: "Kilos",viewWindow: { min : 0 }},
+                                    isStacked: true,
+                                    width: 1000,
+                                    height: 500,
+                                    legend: { position: 'right', maxLines: 3 },
+                                    bar: { groupWidth: '75%' },
+                                };  
+
+                             // Instantiate and draw the chart.
+                             var chart = new google.visualization.BarChart(document.getElementById('YieldChartDetailsforKilos'));
                              chart.draw(data, options);
 
                             });                             
@@ -1181,6 +1296,193 @@ $("#tab10atag").click(function(event)
               google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(function (){
                         drawyieldchart();
+                    }
+
+                );
+            });
+
+        });
+</script>
+<script type="text/javascript" >
+$("#tab11atag").click(function(event)
+{
+                $.ajax({
+                    method: 'get',
+                    url: "/roche/YieldPlant/",
+                    dataType: 'json',
+                    success : function(response){
+                        $("#y2plant_name").empty();
+                        $("#y2plant_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2product").empty();
+                        $("#y2product").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2product_name").empty();
+                        $("#y2product_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2batch_number").empty();
+                        $("#y2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i<response[0].length; i++ )
+                        {
+                            var name = response[0][i];
+                            $("#y2plant_name").append($('<option>',{value: name,text: name}));
+
+                        }
+                        document.getElementById("y2to").value = response[1][1];
+                        document.getElementById("y2from").value = response[1][0];
+                                    
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+
+              /*google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawBoxPlot();
+                    }
+
+                );*/
+});
+</script>
+<script type="text/javascript">
+  $( document ).ready(function() {
+            $("#y2to").change(function(){
+              google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+            });
+            $("#y2from").change(function(){
+              google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+            });
+            $("#y2plant_name").change(function(){
+                  $.ajax({
+                    method: 'get',
+                    url: "/roche/YieldPlantDetails/",
+                    dataType: 'json',
+                    data: {
+                        'plant_name': $('#y2plant_name').val() 
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#y2product").empty();
+                        $("#y2product").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2product_name").empty();
+                        $("#y2product_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2batch_number").empty();
+                        $("#y2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#y2product").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+                  google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+
+            });
+            $("#y2product").change(function(){
+                  $.ajax({
+                    method: 'get',
+                    url: "/roche/YieldProductDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product': $('#y2product').val(),
+                        'plant_name': $('#y2plant_name').val()
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#y2product_name").empty();
+                        $("#y2product_name").append($('<option>',{value: "All",text: "All"}));
+                        $("#y2batch_number").empty();
+                        $("#y2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#y2product_name").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+                  google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+
+            });
+            $("#y2product_name").change(function(){
+                  $.ajax({
+                    method: 'get',
+                    url: "/roche/YieldProductNameDetails/",
+                    dataType: 'json',
+                    data: {
+                        'product_name': $('#y2product_name').val(),
+                        'product': $('#y2product').val(),
+                        'plant_name': $('#y2plant_name').val()
+                    },
+                    success : function(response){
+                        //alert(response);
+                        $("#y2batch_number").empty();
+                        $("#y2batch_number").append($('<option>',{value: "All",text: "All"}));
+                        //$('#product_name').trigger('change');
+                        for(var i= 0; i< response.length; i++ )
+                        {
+                            var name = response[i];
+                            //document.write(name);
+                            $("#y2batch_number").append($('<option>',{value: name,text: name}));
+
+                        }                      
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(textStatus+ '  ' + errorThrown);
+                    }
+                });
+                  google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
+                    }
+
+                );
+
+            });
+            $("#y2batch_number").change(function(){
+              google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(function (){
+                        drawyieldchartforKilos();
                     }
 
                 );
