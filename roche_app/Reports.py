@@ -283,11 +283,11 @@ def YieldChartDetails(pl,p,pn,bn,fd,td):
 	elif (p == "all" or p == "All"):
 		str1 = "select Product_Family, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg)from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' group by product_family;"
 	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
-		str1 = "select product_name, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_family = '"+p+"' group by product_name;"
+		str1 = "select product_name, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' group by product_name;"
 	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
-		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch;"
+		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' and product_name = '"+pn+"' group by batch;"
 	elif (bn != "all" or bn !="All"):
-		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and batch = '"+bn+"';"
+		str1 = "select batch, sum($s_lost___Fill), sum($s_lost___Insp), sum($s_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' and product_name = '"+pn+"' and batch = '"+bn+"';"
 	#print(str1)
 	rows = GetDataFromDatabase(str1)
 	lis=list()
@@ -305,11 +305,11 @@ def YieldChartDetailsforKilos(pl,p,pn,bn,fd,td):
 	elif (p == "all" or p == "All"):
 		str1 = "select Product_Family, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' group by product_family;"
 	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
-		str1 = "select product_name, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_family = '"+p+"' group by product_name;"
+		str1 = "select product_name, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' group by product_name;"
 	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
-		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"' group by batch;"
+		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' and product_name = '"+pn+"' group by batch;"
 	elif (bn != "all" or bn !="All"):
-		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and batch = '"+bn+"';"
+		str1 = "select batch, sum(KGs_lost___Fill), sum(KGs_lost___Insp), sum(KGs_lost___Pkg) from YieldDB where Actual_finish Between '"+fd+"' and '"+td+"' and plant_Name = '"+pl+"' and product_family = '"+p+"' and product_name = '"+pn+"' and batch = '"+bn+"';"
 	print(str1)
 	rows = GetDataFromDatabase(str1)
 	lis=list()
