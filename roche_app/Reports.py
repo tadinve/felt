@@ -228,8 +228,19 @@ def GetPAPLQP(p,pn,bn,fd,td):
 		lis.append([row[0],float(row[1]),float(row[2]),float(row[3])])
 	return lis
 
-def GetPAPLQPPercentage(PA,PL,QA,EE):
-	datasql = "select PL,PA,QA,EE from roche_app_rochenewmodel;"
+def GetPAPLQPPercentage(p,pn,bn,fd,td,PA,PL,QA,EE):
+	format = "%d-%M-%Y"
+	str1 = str()
+	print(p,pn,bn,fd,td)
+	if (p == "all" or p == "All"):
+		str1 = "select product, PL, PA, QA, EE from roche_app_rochenewmodel2 where process_order_creation_date Between '"+fd+"' and '"+td+"';"
+	elif (p != "all" or p != "All") and (pn == "All" or pn == "all" or pn == "") :
+		str1 = "select product_name,  PL, PA, QA, EE from roche_app_rochenewmodel2 where process_order_creation_date Between '"+fd+"' and '"+td+"' and product = '"+p+"';"
+	elif (pn != "all" or p != "All") and (bn == "all" or bn == "All"):
+		str1 = "select batch_number,  PL, PA, QA, EE from roche_app_rochenewmodel2 where process_order_creation_date Between '"+fd+"' and '"+td+"' and product_name = '"+pn+"';"
+	elif (bn != "all" or bn !="All"):
+		str1 = "select batch_number,  PL, PA, QA, EE from roche_app_rochenewmodel2 where process_order_creation_date Between '"+fd+"' and '"+td+"' and batch_number = '"+bn+"';"
+	'''datasql = "select PL,PA,QA,EE from roche_app_rochenewmodel;"
 	data = GetDataFromDatabase(datasql)
 	df = pd.DataFrame(data, columns=["PL","PA","QA","EE"])
 	#print(PA,PL,QA,EE)
@@ -240,7 +251,28 @@ def GetPAPLQPPercentage(PA,PL,QA,EE):
 	PLp = df[df['PL'] < int(PL)].count() / count['PL'] * 100
 	EEp = df[df['EE'] < int(EE)].count() / count['EE'] * 100
 	#print(PAp['PA'],QAp['QA'],PLp['PL'])
-	lis = [['PA',int(PAp['PA'])],['QA',int(QAp['QA'])],['PL',int(PLp['PL'])],['EE',int(EEp['EE'])]]
+	lis = [['Planning',int(PLp['PL'])],['Packaging',int(PAp['PA'])],['Quality',int(QAp['QA'])],['End to End',int(EEp['EE'])]]'''
+	data = GetDataFromDatabase(str1)
+	df = pd.DataFrame(data, columns=["Product","PL","PA","QA","EE"])
+	countpl = df["PL"].count()
+	countpa = df["PA"].count()
+	countqa = df["QA"].count()
+	countee = df["EE"].count()
+	condition_countpa = df[df['PA'] < int(PA)].groupby(['Product'])['PA'].count() / countpa * 100
+	condition_countpadf = pd.DataFrame({'Product': condition_countpa.index, 'PA':condition_countpa.values })
+	condition_countpl = df[df['PL'] < int(PL)].groupby(['Product'])['PL'].count() / countpl * 100
+	condition_countpldf = pd.DataFrame({'Product': condition_countpl.index, 'PL':condition_countpl.values })
+	condition_countqa = df[df['QA'] < int(QA)].groupby(['Product'])['QA'].count() / countqa * 100
+	condition_countqadf = pd.DataFrame({'Product': condition_countqa.index, 'QA':condition_countqa.values })
+	condition_countee = df[df['EE'] < int(EE)].groupby(['Product'])['EE'].count() / countee * 100
+	condition_counteedf = pd.DataFrame({'Product': condition_countee.index, 'EE':condition_countee.values })
+	#print(condition_countpl, condition_countpa, condition_countqa, condition_countee)
+	df2 = pd.merge(pd.merge(pd.merge(condition_countpldf,condition_countpadf,on='Product'),condition_countqadf,on='Product'),condition_counteedf,on='Product')
+	#print(df2)
+	lis= df2.values.tolist()
+	'''for i in condition_countpldf, condition_countpadf, condition_countqadf, condition_counteedf:
+		lis.append(i.to_json(orient='records'))'''
+	#print(lis)
 	return lis
 
 def YieldPlant():

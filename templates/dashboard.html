@@ -116,20 +116,29 @@
     </nav>
     
     <div class="container" style="margin-top: 80px; ">
-        <div class="panel with-nav-tabs panel-default">
+        <!--div class="panel with-nav-tabs panel-default">
+              <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li><a href="#tab10default" data-toggle="tab" id="tab10atag">CTM Dashboard</a></li>
+                    <li><a href="#tab11default" data-toggle="tab" id="tab11atag">Yield Dashboard</a></li>
+
+                </ul>
+            </div>
+        </div-->
+        <div class="panel with-nav-tabs panel-default ">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
                     <!--li ><a href="#tab1default" data-toggle="tab">Tableau Stacked Bar Chart</a></li>
                     <li><a href="#tab3default" data-toggle="tab">Tableau Box Plot Chart</a></li-->
-                    <li><a href="#tab7default" data-toggle="tab">New Tableau Percentage Chart</a></li>
+                    <li><a href="#tab7default" data-toggle="tab">Tableau Percentage Representation</a></li>
                     <!--li><a href="#tab8default" data-toggle="tab">New Tableau Table</a></li-->
-                    <li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li>
+                    <!--li class="active" id="stackedChartTab"><a href="#tab2default" data-toggle="tab">Custom Stacked Bar Chart</a></li-->
                     <!--li><a href="#tab4default" data-toggle="tab" id="tab4atag">Custom Box Plot Chart</a></li>
                     <li><a href="#tab5default" data-toggle="tab" id="tab5atag">Custom Trend Chart</a></li-->
-                    <li ><a href="#tab6default" data-toggle="tab" id="tab6atag">Custom StackBar Chart For PA, PL, QA</a></li>
-                    <li><a href="#tab9default" data-toggle="tab" id="tab9atag">Custom Percentage Chart</a></li>
-                    <li><a href="#tab10default" data-toggle="tab" id="tab10atag">Yield Chart For Dollar Loss</a></li>
-                    <li><a href="#tab11default" data-toggle="tab" id="tab11atag">Yield Chart For Kilos Loss </a></li>
+                    <!--li ><a href="#tab6default" data-toggle="tab" id="tab6atag">Custom StackBar Chart For PA, PL, QA</a></li-->
+                    <li ><a href="#tab9default" data-toggle="tab" id="tab9atag">Percentage Representation</a></li>
+                    <li class="active"><a href="#tab10default" data-toggle="tab" id="tab10atag">Dollar Loss</a></li>
+                    <li><a href="#tab11default" data-toggle="tab" id="tab11atag">Kilos Loss </a></li>
 
                 </ul>
             </div>
@@ -283,7 +292,7 @@
                      </div>
                     </div>
             </div>
-            <div class="tab-pane fade" id="tab10default">
+            <div class="tab-pane fade in active" id="tab10default">
                 <div class="row">
                 <div class="panel">
                 <div class="panel-body">
@@ -589,27 +598,61 @@
                     </div>
                     <div id="stackbar2"></div>
             </div>
-            <div class="tab-pane fade" id="tab9default">
+            <div class="tab-pane" id="tab9default">
                 <div class="row">
                 <div class="panel">
                 <div class="panel-body">
                   <div class="row">
-
+                    <div class="col-lg-2">
+                          <label for="from">From:</label>
+                          <input type="date" class="form-control" id="s3from" value="{{ mindate }}" >
+                      </div>
+                      <div class="col-lg-2 divide">
+                          <label for="to">To:</label>
+                          <input type="date" class="form-control" id="s3to" value="{{ maxdate }}" >
+                      </div>
                       <div class="col-lg-2">
-                          <label for="from">PL (Planning): </label>
-                          <input type="text" class="form-control" id="PL" value="18" onkeypress="handle(event)">
+                          <label for="to">Product Family:</label>
+                          <select class="form-control" id="s3product" >
+                              <option value="all">All</option>
+                              {% for product in products %}
+                              <option value='{{ product }}'>{{ product }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Product Name:</label>
+                          <select class="form-control" id="s3product_name" >
+                              <option value="">All</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-2">
+                          <label for="to">Batch Number:</label>
+                          <select class="form-control" id="s3batch_number" >
+                              <option value="all">All</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <br>
+                    <br>
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-2">
+                          <label for="from">Planning: </label>
+                          <input type="text" class="form-control" id="PL" value="10" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2 ">
-                          <label for="from">PA (Packaging): </label>
-                          <input type="text" class="form-control" id="PA" value="1" onkeypress="handle(event)">
+                          <label for="from">Packaging: </label>
+                          <input type="text" class="form-control" id="PA" value="2" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2">
-                          <label for="from">QA (Quality): </label>
-                          <input type="text" class="form-control" id="QA" value="16" onkeypress="handle(event)">
+                          <label for="from">Quality: </label>
+                          <input type="text" class="form-control" id="QA" value="10" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2">
-                          <label for="from">EE (End to End): </label>
-                          <input type="text" class="form-control" id="EE" value="10" onkeypress="handle(event)">
+                          <label for="from">End to End: </label>
+                          <input type="text" class="form-control" id="EE" value="20" onkeypress="handle(event)">
                       </div>
                       <div class="col-lg-2">
                       </div>
@@ -623,36 +666,34 @@
                         <script type="text/javascript">
                        function drawpercentagebar() {
                             var data;
-                            $.getJSON('/roche/GetPAPLQPPercentage/', {'PA': $('#PA').val(),'PL' : $('#PL').val(),'QA': $('#QA').val(),'EE': $('#EE').val() } ,function(json) {
+                            $.getJSON('/roche/GetPAPLQPPercentage/', {'PA': $('#PA').val(),'PL' : $('#PL').val(),'QA': $('#QA').val(),'EE': $('#EE').val(),'product_name': $('#s3product_name').val(),'product' : $('#s3product').val(),'batch_number': $('#s3batch_number').val(),'fromDate': $('#s3from').val(),'toDate': $('#s3to').val()} ,function(json) {
                               data = new google.visualization.DataTable();
-                                             data.addColumn('string', 'Process');
-                                             data.addColumn('number', 'Percentage');
+                                             data.addColumn('string', 'ProductName');
+                                             data.addColumn('number', 'Planning');
+                                             data.addColumn('number', 'Packaging');
+                                             data.addColumn('number', 'Quality');
+                                             data.addColumn('number', 'End to End');
                                              //alert(data);
                                              for ( var i= 0; i < json.length; i++)
                                              {
                                                //document.write(json[i][1]);
-                                               data.addRow([json[i][0],json[i][1]]);
+                                               data.addRow([json[i][1],json[i][0],json[i][2],json[i][3],json[i][4]]);
                                              }
-                                             var view = new google.visualization.DataView(data);
-                                                   view.setColumns([0, 1,
-                                                                    { calc: "stringify",
-                                                                      sourceColumn: 1,
-                                                                      type: "string",
-                                                                      role: "annotation" }]);
-                                    
+
                                              var options = {
-                                             title: "Percentage Chart",
-                                             width: 1000,
-                                             height: 500,
-                                             vAxis: {title: "Process"},
+                                    title: "Percentage Chart",
+                                    vAxis: {title: "Items"},
                                     hAxis : {title: "Percentage",viewWindow: { min : 0 }},
-                                             colors: ['#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
-                                             legend: { position: 'right', maxLines: 3 },
-                                             bar: { groupWidth: '75%' },
-                                           };
+                                    width: 1000,
+                                    height: 500,
+                                    legend: { position: 'right', maxLines: 3 },
+                                    bar: { groupWidth: '75%' },
+                                };  
+
                              // Instantiate and draw the chart.
                              var chart = new google.visualization.BarChart(document.getElementById('percentage1'));
-                             chart.draw(view, options);
+                             chart.draw(data, options);
+
 
                             });
                                 
@@ -686,7 +727,7 @@
                 <param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /><param name='showShareOptions' value='true' /></object></div>
 
             </div>
-              <div class="tab-pane fade in active" id="tab2default">
+              <div class="tab-pane fade" id="tab2default">
               <div class="panel">
                 <div class="panel-body">
                   <div class="row">              
