@@ -178,11 +178,16 @@ def GetPAPLQP(request):
 	return response
 	
 def GetPAPLQPPercentage(request):
+	product = request.GET.get('product',None)
+	product_name = request.GET.get('product_name',None)
+	batch_number = request.GET.get('batch_number',None)
+	from_date = request.GET.get('fromDate',None)
+	to_date = request.GET.get('toDate',None)
 	PA = request.GET.get('PA',None)
 	PL = request.GET.get('PL',None)
 	QA = request.GET.get('QA',None)
 	EE = request.GET.get('EE',None)
-	data = Reports.GetPAPLQPPercentage(PA,PL,QA,EE)
+	data = Reports.GetPAPLQPPercentage(product,product_name,batch_number,from_date,to_date,PA,PL,QA,EE)
 	#print(data)
 	#products = Reports.GetAllProducts()
 	#print(data)
